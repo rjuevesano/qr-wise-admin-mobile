@@ -1,29 +1,58 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import {
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider,
+} from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
+import { Redirect, Stack } from 'expo-router';
+import { StatusBar } from 'react-native';
 import 'react-native-reanimated';
+import { AuthProvider, useAuth } from '~/context/AuthUserContext';
+import { SnackbarProvider } from '~/context/SnackbarContext';
+import { useColorScheme } from '~/hooks/useColorScheme';
+import '../global.css';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
+function Root() {
+  const colorScheme = useColorScheme();
+  const { user } = useAuth();
+  console.log('=user=', user);
+
+  return (
+    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen
+          name="(auth)"
+          options={{ animation: 'slide_from_right' }}
+        />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="+not-found" />
+      </Stack>
+      <StatusBar barStyle="default" />
+      {user ? <Redirect href="/dashboard" /> : <Redirect href="/main" />}
+    </ThemeProvider>
+  );
+}
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+  const [loaded, error] = useFonts({
+    OnestLight: require('../assets/fonts/Onest-Light.ttf'),
+    OnestThin: require('../assets/fonts/Onest-Thin.ttf'),
+    OnestRegular: require('../assets/fonts/Onest-Regular.ttf'),
+    OnestMedium: require('../assets/fonts/Onest-Medium.ttf'),
+    OnestSemiBold: require('../assets/fonts/Onest-SemiBold.ttf'),
+    OnestBold: require('../assets/fonts/Onest-Bold.ttf'),
   });
 
-  if (!loaded) {
-    // Async font loading only occurs in development.
+  // Don't render anything until fonts are loaded
+  if (!loaded && !error) {
     return null;
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <AuthProvider>
+      <SnackbarProvider>
+        <Root />
+      </SnackbarProvider>
+    </AuthProvider>
   );
 }
