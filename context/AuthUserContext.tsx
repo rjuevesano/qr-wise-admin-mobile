@@ -1,52 +1,67 @@
-import { onAuthStateChanged, User } from 'firebase/auth';
+import * as SecureStore from 'expo-secure-store';
 import { doc, getDoc } from 'firebase/firestore';
 import {
   createContext,
   PropsWithChildren,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
-import { auth, db } from '~/lib/firebase';
-import { Store } from '~/types';
+import { db } from '~/lib/firebase';
+import { Store, User } from '~/types';
 
 type AuthContextType = {
-  user: User | null;
+  user: User | null | undefined;
+  setUser: (user: User | null | undefined) => void;
+  loginUser: (user: User) => void;
+  logoutUser: () => void;
   store: Store | null;
-  baseRoute: string;
 };
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
+  setUser: () => {
+    throw new Error();
+  },
+  loginUser: () => {
+    throw new Error();
+  },
+  logoutUser: () => {
+    throw new Error();
+  },
   store: null,
-  baseRoute: '',
 });
 
-export function AuthProvider({ children }: PropsWithChildren) {
-  const storeId = '';
+const SESSION_KEY = 'auth_session';
 
-  const [user, setUser] = useState<User | null>(null);
+export function AuthProvider({ children }: PropsWithChildren) {
+  const storeId = process.env.EXPO_PUBLIC_STORE_ID;
+
+  const [user, setUser] = useState<User | null | undefined>(undefined);
   const [store, setStore] = useState<Store | null>(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      console.log('🔥 Firebase auth state changed:', user);
-
-      if (!user) {
+    const checkSession = async () => {
+      try {
+        const session = await SecureStore.getItemAsync(SESSION_KEY);
+        if (session) {
+          const userData = JSON.parse(session);
+          setUser(userData);
+        }
+      } catch (error) {
+        console.error('Session check failed:', error);
         setUser(null);
-        return;
       }
+    };
 
-      setUser(user);
-    });
-
-    return () => unsubscribe();
+    checkSession();
   }, []);
 
   useEffect(() => {
     if (!storeId) return;
-
     getStore();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [storeId]);
 
   async function getStore() {
@@ -59,12 +74,28 @@ export function AuthProvider({ children }: PropsWithChildren) {
     }
   }
 
-  return (
-    <AuthContext.Provider
-      value={{ user, store, baseRoute: `/store/${store?.id}` }}>
-      {children}
-    </AuthContext.Provider>
+  async function loginUser(user: User) {
+    await SecureStore.setItemAsync(SESSION_KEY, JSON.stringify(user));
+    setUser(user);
+  }
+
+  async function logoutUser() {
+    await SecureStore.deleteItemAsync(SESSION_KEY);
+    setUser(null);
+  }
+
+  const value = useMemo(
+    () => ({
+      user,
+      setUser,
+      loginUser,
+      logoutUser,
+      store,
+    }),
+    [user, store],
   );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export const useAuth = () => useContext(AuthContext);

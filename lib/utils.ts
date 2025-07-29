@@ -39,3 +39,19 @@ export const maskNumber = (number: string) => {
   const str = number.toString();
   return str.slice(0, -4).replace(/./g, '*') + str.slice(-4);
 };
+
+export const generateOTP = () => {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+};
+
+export const getTimeOfDay = (date = new Date()) => {
+  const hour = date.getHours();
+
+  if (hour >= 5 && hour < 12) {
+    return 'morning';
+  } else if (hour >= 12 && hour < 17) {
+    return 'afternoon';
+  } else {
+    return 'evening';
+  }
+};

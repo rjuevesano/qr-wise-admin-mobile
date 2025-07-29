@@ -15,16 +15,15 @@ import '../global.css';
 function Root() {
   const colorScheme = useColorScheme();
   const { user } = useAuth();
-  console.log('=user=', user);
+
+  if (user === undefined) return null;
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen
-          name="(auth)"
-          options={{ animation: 'slide_from_right' }}
-        />
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(auth)" />
+        <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="(protected)" />
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar barStyle="default" />

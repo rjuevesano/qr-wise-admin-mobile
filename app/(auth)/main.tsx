@@ -1,4 +1,5 @@
 import { LinearGradient } from 'expo-linear-gradient';
+import { router } from 'expo-router';
 import { SafeAreaView, Text, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { Button } from '~/components/ui/button';
@@ -64,7 +65,9 @@ export default function MainScreen() {
             lightning-fast QR code ordering.
           </Text>
         </View>
-        <Button className="mx-4 mb-10 h-14 bg-[#0C0E12]">
+        <Button
+          onPress={() => router.push('/login')}
+          className="mx-4 mb-10 h-14 bg-[#0C0E12]">
           <Text className="font-OnestSemiBold text-[#CECFD2]">Login</Text>
         </Button>
       </SafeAreaView>
