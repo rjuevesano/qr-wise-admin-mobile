@@ -20,6 +20,7 @@ import Svg, {
   Stop,
   Use,
 } from 'react-native-svg';
+import FloatingMenu from '~/components/FloatingMenu';
 import { useAuth } from '~/context/AuthUserContext';
 import { getTimeOfDay } from '~/lib/utils';
 
@@ -114,7 +115,7 @@ export default function DashboardScreen() {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
             paddingTop: 24,
-            paddingBottom: 120,
+            paddingBottom: 140,
             paddingHorizontal: 16,
             gap: 16,
           }}>
@@ -540,6 +541,7 @@ export default function DashboardScreen() {
             </View>
           </View>
         </ScrollView>
+        <FloatingMenu />
       </SafeAreaView>
     </View>
   );
