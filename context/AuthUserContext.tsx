@@ -48,6 +48,8 @@ export function AuthProvider({ children }: PropsWithChildren) {
         if (session) {
           const userData = JSON.parse(session);
           setUser(userData);
+        } else {
+          setUser(null);
         }
       } catch (error) {
         console.error('Session check failed:', error);
