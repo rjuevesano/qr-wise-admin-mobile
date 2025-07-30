@@ -55,3 +55,22 @@ export const getTimeOfDay = (date = new Date()) => {
     return 'evening';
   }
 };
+
+export function formatPrice(price: number) {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'PHP',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(price);
+}
+
+export function formatStringToNumber(str: string) {
+  const value = parseFloat((str || '').toString().replace(/,/g, ''));
+
+  if (isNaN(value)) {
+    return 0;
+  }
+
+  return value;
+}

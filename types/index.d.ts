@@ -32,6 +32,7 @@ export type UserType = 'SERVICE' | 'KITCHEN' | 'BAR' | 'CUSTOMER';
 export type User = {
   id?: string;
   name?: string;
+  phone?: string;
   image: string;
   firstName: string;
   lastName: string;

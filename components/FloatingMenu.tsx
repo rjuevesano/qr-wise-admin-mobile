@@ -1,4 +1,5 @@
 import { MaterialIcons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import React, { useRef, useState } from 'react';
 import {
   Animated,
@@ -122,7 +123,7 @@ const actions = [
     ),
     key: 'menu',
   },
-];
+].reverse();
 
 export default function FloatingMenu() {
   const animation = useRef(new Animated.Value(0)).current;
@@ -139,6 +140,17 @@ export default function FloatingMenu() {
 
   const handleAction = (key: string) => {
     console.log(`${key} selected`);
+    if (key === 'search') {
+      router.push('/ai');
+    } else if (key === 'notes') {
+      //
+    } else if (key === 'banner') {
+      //
+    } else if (key === 'toggle') {
+      //
+    } else if (key === 'menu') {
+      router.push('/menu');
+    }
     toggleMenu(); // Auto-close
   };
 
@@ -153,7 +165,7 @@ export default function FloatingMenu() {
         />
       )}
       <View style={styles.container}>
-        {actions.reverse().map((action, index) => {
+        {actions.map((action, index) => {
           const translateY = animation.interpolate({
             inputRange: [0, 1],
             outputRange: [0, -(index + 1) * 60],
