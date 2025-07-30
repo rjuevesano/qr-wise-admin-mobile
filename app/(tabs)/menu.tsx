@@ -3,13 +3,13 @@ import { useEffect, useState } from 'react';
 import {
   Keyboard,
   Platform,
-  SafeAreaView,
   Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Circle, ClipPath, Defs, G, Path, Rect } from 'react-native-svg';
 import PlaceholderImage from '~/components/PlaceholderImage';
 import { Input } from '~/components/ui/input';

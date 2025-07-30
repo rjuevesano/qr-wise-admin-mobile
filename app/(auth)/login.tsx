@@ -11,7 +11,6 @@ import { useEffect, useRef, useState } from 'react';
 import {
   Keyboard,
   Platform,
-  SafeAreaView,
   Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
@@ -19,6 +18,7 @@ import {
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import OTPTextInput from 'react-native-otp-textinput';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Path } from 'react-native-svg';
 import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';

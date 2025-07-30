@@ -2,13 +2,13 @@ import { useState } from 'react';
 import {
   Keyboard,
   Platform,
-  SafeAreaView,
   Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { cn } from '~/lib/utils';
 import General from './General';
 import Tax from './Tax';

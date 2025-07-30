@@ -4,13 +4,18 @@ import {
   ThemeProvider,
 } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { Redirect, Stack } from 'expo-router';
+import { Stack } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
+import { useEffect } from 'react';
 import { StatusBar } from 'react-native';
 import 'react-native-reanimated';
 import { AuthProvider, useAuth } from '~/context/AuthUserContext';
 import { SnackbarProvider } from '~/context/SnackbarContext';
 import { useColorScheme } from '~/hooks/useColorScheme';
 import '../global.css';
+
+// Prevent the splash screen from auto-hiding before asset loading is complete.
+SplashScreen.preventAutoHideAsync();
 
 function Root() {
   const colorScheme = useColorScheme();
@@ -20,14 +25,19 @@ function Root() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="(auth)" />
-        <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="(protected)" />
+      <Stack
+        screenOptions={{ headerShown: false }}
+        initialRouteName={!!user ? '(tabs)' : '(auth)'}>
+        <Stack.Protected guard={user === null}>
+          <Stack.Screen name="(auth)" />
+        </Stack.Protected>
+        <Stack.Protected guard={!!user}>
+          <Stack.Screen name="(tabs)" />
+          <Stack.Screen name="(protected)" />
+        </Stack.Protected>
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar barStyle="default" />
-      {user ? <Redirect href="/dashboard" /> : <Redirect href="/main" />}
     </ThemeProvider>
   );
 }
@@ -41,6 +51,13 @@ export default function RootLayout() {
     OnestSemiBold: require('../assets/fonts/Onest-SemiBold.ttf'),
     OnestBold: require('../assets/fonts/Onest-Bold.ttf'),
   });
+
+  useEffect(() => {
+    if (loaded || error) {
+      // Hide splash screen once fonts are loaded or if there's an error
+      SplashScreen.hideAsync();
+    }
+  }, [loaded, error]);
 
   // Don't render anything until fonts are loaded
   if (!loaded && !error) {

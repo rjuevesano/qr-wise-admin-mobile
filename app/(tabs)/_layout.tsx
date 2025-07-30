@@ -148,7 +148,9 @@ const TabItem = ({
   };
 }) => {
   const pathname = usePathname();
-  const isActive = pathname.includes(tab.route);
+  const isActive =
+    (pathname === '/' && tab.route === '/dashboard') ||
+    pathname.includes(tab.route);
   const color = isActive ? '#9CDF03' : '#61656C';
 
   // Background animation value
@@ -218,6 +220,7 @@ export default function TabLayout() {
   return (
     <View className="flex-1 bg-[#0C0E12]">
       <Tabs
+        initialRouteName="dashboard"
         screenOptions={{
           headerShown: false,
           tabBarStyle: { display: 'none' },

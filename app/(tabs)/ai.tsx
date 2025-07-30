@@ -5,7 +5,6 @@ import {
   Keyboard,
   Modal,
   Platform,
-  SafeAreaView,
   Text,
   TextInput,
   TouchableOpacity,
@@ -13,6 +12,7 @@ import {
   View,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { ClipPath, Defs, G, Path, Rect } from 'react-native-svg';
 import { getRandomPrompts } from '~/lib/constants';
 
