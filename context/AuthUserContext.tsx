@@ -8,6 +8,7 @@ import {
   useMemo,
   useState,
 } from 'react';
+import { SharedValue, useSharedValue } from 'react-native-reanimated';
 import { db } from '~/lib/firebase';
 import { Store, User } from '~/types';
 
@@ -19,6 +20,8 @@ type AuthContextType = {
   updateUser: (updates: Partial<User>) => void;
   store: Store | null;
   getStore: (storeId?: string) => void;
+  openSheet: SharedValue<boolean>;
+  toggleSheet: () => void;
 };
 
 const AuthContext = createContext<AuthContextType>({
@@ -39,6 +42,10 @@ const AuthContext = createContext<AuthContextType>({
   getStore: () => {
     throw new Error();
   },
+  openSheet: {} as SharedValue<boolean>,
+  toggleSheet: () => {
+    throw new Error();
+  },
 });
 
 const SESSION_KEY = 'auth_session';
@@ -48,6 +55,8 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
   const [user, setUser] = useState<User | null | undefined>(undefined);
   const [store, setStore] = useState<Store | null>(null);
+
+  const openSheet = useSharedValue<boolean>(false);
 
   useEffect(() => {
     const checkSession = async () => {
@@ -106,6 +115,9 @@ export function AuthProvider({ children }: PropsWithChildren) {
     await SecureStore.setItemAsync(SESSION_KEY, JSON.stringify(updatedUser));
     setUser(updatedUser);
   }
+  const toggleSheet = () => {
+    openSheet.value = !openSheet.value;
+  };
 
   const value = useMemo(
     () => ({
@@ -116,9 +128,11 @@ export function AuthProvider({ children }: PropsWithChildren) {
       updateUser,
       store,
       getStore,
+      openSheet,
+      toggleSheet,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [user, store],
+    [user, store, openSheet],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

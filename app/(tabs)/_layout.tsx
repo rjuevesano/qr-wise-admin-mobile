@@ -8,6 +8,9 @@ import Animated, {
 } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Path, Svg } from 'react-native-svg';
+import BottomSheet from '~/components/BottomSheet';
+import SwitchBranch from '~/components/SwitchBranch';
+import { useAuth } from '~/context/AuthUserContext';
 
 const HIDDEN_TAB_ROUTES = [] as string[];
 
@@ -196,6 +199,7 @@ const TabItem = ({
 
 export default function TabLayout() {
   const pathname = usePathname();
+  const { openSheet, toggleSheet } = useAuth();
 
   // Check if tab bar should be hidden
   const hideTabBar = useMemo(() => {
@@ -243,6 +247,9 @@ export default function TabLayout() {
           ))}
         </SafeAreaView>
       </Animated.View>
+      <BottomSheet isOpen={openSheet} toggleSheet={toggleSheet}>
+        <SwitchBranch />
+      </BottomSheet>
     </View>
   );
 }
