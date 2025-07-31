@@ -103,7 +103,7 @@ export default function LoginScreen() {
         const querySnapshot = await getDocs(q);
         if (!querySnapshot.empty) {
           const user = querySnapshot.docs[0].data() as User;
-          loginUser(user);
+          loginUser({ ...user, id: querySnapshot.docs[0].id });
           router.replace('/dashboard');
         } else {
           showSnackbar('Invalid OTP. Try again.');
@@ -169,8 +169,9 @@ export default function LoginScreen() {
                     value={phoneNumber}
                     onChangeText={setPhoneNumber}
                     inputMode="numeric"
+                    maxLength={10}
                   />
-                  <View className="absolute bottom-0 left-3 top-3.5">
+                  <View className="absolute bottom-0 left-3 top-[13px]">
                     <Text className="text-base text-[#94979C]">+63</Text>
                   </View>
                 </View>

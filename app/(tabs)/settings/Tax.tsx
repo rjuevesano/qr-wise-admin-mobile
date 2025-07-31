@@ -1,13 +1,46 @@
+import { router, useFocusEffect } from 'expo-router';
+import { doc, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { ChevronRightIcon, PlusIcon } from 'lucide-react-native';
+import { useCallback, useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { Button } from '~/components/ui/button';
 import { Separator } from '~/components/ui/separator';
 import { Switch } from '~/components/ui/switch';
 import { useAuth } from '~/context/AuthUserContext';
+import { useSnackbar } from '~/context/SnackbarContext';
+import { db } from '~/lib/firebase';
 import { cn } from '~/lib/utils';
+import { Discount } from '~/types';
 
 export default function Tax() {
   const { store } = useAuth();
+  const { showSnackbar } = useSnackbar();
+
+  const [discounts, setDiscounts] = useState<Discount[]>([]);
+
+  useFocusEffect(
+    useCallback(() => {
+      if (store?.discounts) {
+        setDiscounts(store.discounts);
+      }
+    }, [store]),
+  );
+
+  async function updateDiscountSpecial(discount: Discount, isSpecial: boolean) {
+    const ref = doc(db, 'stores', store?.id!);
+    const updatedDiscounts = discounts.map((i) => ({
+      ...i,
+      isSpecial: i.id === discount.id ? isSpecial : i.isSpecial,
+    }));
+
+    await updateDoc(ref, {
+      discounts: updatedDiscounts,
+      updatedAt: serverTimestamp(),
+    });
+
+    setDiscounts(updatedDiscounts);
+    showSnackbar('Changes successfully saved!');
+  }
 
   return (
     <>
@@ -16,7 +49,9 @@ export default function Tax() {
           Value Added Tax
         </Text>
         <View className="gap-2 rounded-xl border border-[#22262F] bg-[#13161B] p-3">
-          <TouchableOpacity className="gap-1">
+          <TouchableOpacity
+            onPress={() => showSnackbar('Contact support to change VAT')}
+            className="gap-1">
             <Text className="font-OnestMedium text-xs text-[#CECFD2]">
               Tax %
             </Text>
@@ -34,7 +69,13 @@ export default function Tax() {
           Service Charge
         </Text>
         <View className="gap-2 rounded-xl border border-[#22262F] bg-[#13161B] p-3">
-          <TouchableOpacity className="gap-1">
+          <TouchableOpacity
+            onPress={() =>
+              router.push(
+                `/update-info?id=${store?.id}&value=${store?.serviceChargePercentage}&label=Service Charge&label2=Tax %&key=serviceChargePercentage&collection=stores`,
+              )
+            }
+            className="gap-1">
             <Text className="font-OnestMedium text-xs text-[#CECFD2]">
               Tax %
             </Text>
@@ -50,7 +91,13 @@ export default function Tax() {
       <View className="gap-2">
         <Text className="font-OnestSemiBold text-[#F7F7F7]">To Go Charge</Text>
         <View className="gap-2 rounded-xl border border-[#22262F] bg-[#13161B] p-3">
-          <TouchableOpacity className="gap-1">
+          <TouchableOpacity
+            onPress={() =>
+              router.push(
+                `/update-info?id=${store?.id}&value=${store?.togoCharge}&label=To Go Charge&label2=Charge (PHP)&key=togoCharge&collection=stores`,
+              )
+            }
+            className="gap-1">
             <Text className="font-OnestMedium text-xs text-[#CECFD2]">
               Charge (PHP)
             </Text>
@@ -65,7 +112,7 @@ export default function Tax() {
       </View>
       <View className="gap-2">
         <Text className="font-OnestSemiBold text-[#F7F7F7]">Discounts</Text>
-        {store?.discounts.map((discount) => (
+        {discounts.map((discount) => (
           <View
             key={discount.id}
             className="gap-2 rounded-xl border border-[#22262F] bg-[#13161B] p-3">
@@ -77,10 +124,15 @@ export default function Tax() {
                 <Switch
                   className={cn(discount.isSpecial && 'bg-[#78B300]')}
                   checked={discount.isSpecial}
-                  onCheckedChange={() => console.log('checked')}
+                  onCheckedChange={(checked) =>
+                    updateDiscountSpecial(discount, checked)
+                  }
                 />
               </View>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() =>
+                  router.push(`/add-edit-discount?discountId=${discount.id}`)
+                }>
                 <ChevronRightIcon color="#CECFD2" />
               </TouchableOpacity>
             </View>
@@ -103,7 +155,9 @@ export default function Tax() {
             </View>
           </View>
         ))}
-        <Button className="flex-row items-center gap-1 border border-[#373A41] bg-[#0C0E12]">
+        <Button
+          onPress={() => router.push('/add-edit-discount')}
+          className="flex-row items-center gap-1 border border-[#373A41] bg-[#0C0E12]">
           <PlusIcon color="#61656C" size="20" />
           <Text className="text-[#CECFD2]">Add Another Discount</Text>
         </Button>

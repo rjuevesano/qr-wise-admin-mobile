@@ -34,10 +34,10 @@ export default function Snackbar({
           animate={{ translateY: 0, opacity: 1 }}
           exit={{ translateY: 100, opacity: 0 }}
           transition={{ type: 'timing', duration: 300 }}
-          className="absolute bottom-6 left-4 right-4 z-50 flex-row items-center justify-between rounded-xl bg-black/90 px-4 py-3">
-          <Text className="flex-1 text-white">{message}</Text>
+          className="absolute bottom-12 left-4 right-4 z-50 flex-row items-center justify-between rounded-xl bg-black/90 px-4 py-3">
+          <Text className="flex-1 font-OnestRegular text-white">{message}</Text>
           <TouchableOpacity onPress={onClose} className="ml-4">
-            <X color="white" size={20} />
+            <X color="white" size={18} />
           </TouchableOpacity>
         </MotiView>
       )}

@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import { ChevronRightIcon } from 'lucide-react-native';
 import { Text, TouchableOpacity, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
@@ -14,7 +15,13 @@ export default function General() {
           Account Information
         </Text>
         <View className="gap-2 rounded-xl border border-[#22262F] bg-[#13161B] p-3">
-          <TouchableOpacity className="gap-1">
+          <TouchableOpacity
+            onPress={() =>
+              router.push(
+                `/update-info?id=${user?.id}&value=${user?.name}&label=Full Name&key=name&collection=managers-pin`,
+              )
+            }
+            className="gap-1">
             <Text className="font-OnestMedium text-xs text-[#CECFD2]">
               Full Name
             </Text>
@@ -26,7 +33,13 @@ export default function General() {
             </View>
           </TouchableOpacity>
           <Separator className="bg-[#22262F]" />
-          <TouchableOpacity className="gap-1">
+          <TouchableOpacity
+            onPress={() =>
+              router.push(
+                `/update-info?id=${user?.id}&value=${user?.phone}&label=Phone&key=phone&collection=managers-pin`,
+              )
+            }
+            className="gap-1">
             <Text className="font-OnestMedium text-xs text-[#CECFD2]">
               Phone
             </Text>
@@ -44,7 +57,13 @@ export default function General() {
           Business Information
         </Text>
         <View className="gap-2 rounded-xl border border-[#22262F] bg-[#13161B] p-3">
-          <TouchableOpacity className="gap-1">
+          <TouchableOpacity
+            onPress={() =>
+              router.push(
+                `/update-info?id=${store?.id}&value=${store?.name}&label=Business Name&key=name&collection=stores`,
+              )
+            }
+            className="gap-1">
             <Text className="font-OnestMedium text-xs text-[#CECFD2]">
               Business Name
             </Text>
@@ -56,7 +75,13 @@ export default function General() {
             </View>
           </TouchableOpacity>
           <Separator className="bg-[#22262F]" />
-          <TouchableOpacity className="gap-1">
+          <TouchableOpacity
+            onPress={() =>
+              router.push(
+                `/update-info?id=${store?.id}&value=${store?.email}&label=Email Address&key=email&collection=stores`,
+              )
+            }
+            className="gap-1">
             <Text className="font-OnestMedium text-xs text-[#CECFD2]">
               Email Address
             </Text>
@@ -68,7 +93,13 @@ export default function General() {
             </View>
           </TouchableOpacity>
           <Separator className="bg-[#22262F]" />
-          <TouchableOpacity className="gap-1">
+          <TouchableOpacity
+            onPress={() =>
+              router.push(
+                `/update-info?id=${store?.id}&value=${store?.address}&label=Business Address&key=address&collection=stores`,
+              )
+            }
+            className="gap-1">
             <Text className="font-OnestMedium text-xs text-[#CECFD2]">
               Business Address
             </Text>
@@ -80,7 +111,13 @@ export default function General() {
             </View>
           </TouchableOpacity>
           <Separator className="bg-[#22262F]" />
-          <TouchableOpacity className="gap-1">
+          <TouchableOpacity
+            onPress={() =>
+              router.push(
+                `/update-info?id=${store?.id}&value=${store?.phone}&label=Mobile Number&key=phone&collection=stores`,
+              )
+            }
+            className="gap-1">
             <Text className="font-OnestMedium text-xs text-[#CECFD2]">
               Mobile Number
             </Text>
@@ -92,7 +129,13 @@ export default function General() {
             </View>
           </TouchableOpacity>
           <Separator className="bg-[#22262F]" />
-          <TouchableOpacity className="gap-1">
+          <TouchableOpacity
+            onPress={() =>
+              router.push(
+                `/update-info?id=${store?.id}&value=${store?.tin}&label=Tax Identification Number (TIN)&key=tin&collection=stores`,
+              )
+            }
+            className="gap-1">
             <Text className="font-OnestMedium text-xs text-[#CECFD2]">
               Tax Identification Number (TIN)
             </Text>

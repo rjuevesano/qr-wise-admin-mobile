@@ -16,7 +16,9 @@ type AuthContextType = {
   setUser: (user: User | null | undefined) => void;
   loginUser: (user: User) => void;
   logoutUser: () => void;
+  updateUser: (updates: Partial<User>) => void;
   store: Store | null;
+  getStore: (storeId?: string) => void;
 };
 
 const AuthContext = createContext<AuthContextType>({
@@ -30,7 +32,13 @@ const AuthContext = createContext<AuthContextType>({
   logoutUser: () => {
     throw new Error();
   },
+  updateUser: () => {
+    throw new Error();
+  },
   store: null,
+  getStore: () => {
+    throw new Error();
+  },
 });
 
 const SESSION_KEY = 'auth_session';
@@ -66,8 +74,8 @@ export function AuthProvider({ children }: PropsWithChildren) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [storeId]);
 
-  async function getStore() {
-    const storeSnapshot = await getDoc(doc(db, 'stores', storeId!));
+  async function getStore(id?: string) {
+    const storeSnapshot = await getDoc(doc(db, 'stores', id || storeId!));
     if (storeSnapshot.exists()) {
       setStore({
         id: storeSnapshot.id,
@@ -86,14 +94,30 @@ export function AuthProvider({ children }: PropsWithChildren) {
     setUser(null);
   }
 
+  async function updateUser(updates: Partial<User>) {
+    const stored = await SecureStore.getItemAsync(SESSION_KEY);
+    if (!stored) {
+      throw new Error('No user data found');
+    }
+
+    const currentUser = JSON.parse(stored);
+    const updatedUser = { ...currentUser, ...updates };
+
+    await SecureStore.setItemAsync(SESSION_KEY, JSON.stringify(updatedUser));
+    setUser(updatedUser);
+  }
+
   const value = useMemo(
     () => ({
       user,
       setUser,
       loginUser,
       logoutUser,
+      updateUser,
       store,
+      getStore,
     }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [user, store],
   );
 
