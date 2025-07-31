@@ -172,7 +172,7 @@ export default function LoginScreen() {
                     maxLength={10}
                   />
                   <View className="absolute bottom-0 left-3 top-[13px]">
-                    <Text className="text-base text-[#94979C]">+63</Text>
+                    <Text className="text-default-tertiary text-base">+63</Text>
                   </View>
                 </View>
               </View>
@@ -181,7 +181,7 @@ export default function LoginScreen() {
                 <Text className="font-OnestSemiBold text-[36px] text-white">
                   Enter the{'\n'}verification code
                 </Text>
-                <Text className="mt-2 text-[#CECFD2]">
+                <Text className="text-default-secondary mt-2">
                   We sent a code to +63 {phoneNumber}
                 </Text>
                 <View className="mt-8 flex-1 gap-4 px-4">
@@ -204,14 +204,14 @@ export default function LoginScreen() {
                     disabled={loading}
                   />
                   {loading ? (
-                    <Text className="text-center font-OnestSemiBold text-[#CECFD2]">
+                    <Text className="text-default-secondary text-center font-OnestSemiBold">
                       Verifying...
                     </Text>
                   ) : (
                     <TouchableOpacity
                       onPress={onPressSendOTP}
                       disabled={cooldown > 0}>
-                      <Text className="text-center font-OnestSemiBold text-[#CECFD2]">
+                      <Text className="text-default-secondary text-center font-OnestSemiBold">
                         {cooldown > 0
                           ? `Resend in ${cooldown}s`
                           : 'Resend code'}
@@ -229,7 +229,9 @@ export default function LoginScreen() {
             onPress={onPressSendOTP}
             variant="outline"
             className="mx-4 mb-10 h-14 bg-[#0C0E12]">
-            <Text className="font-OnestSemiBold text-[#CECFD2]">Next</Text>
+            <Text className="text-default-secondary font-OnestSemiBold">
+              Next
+            </Text>
           </Button>
         )}
       </SafeAreaView>

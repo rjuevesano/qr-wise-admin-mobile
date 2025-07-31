@@ -87,11 +87,11 @@ export default function UpdateInfoScreen() {
               <View className="size-10" />
             </View>
             <View className="mt-5 gap-4 px-4">
-              <Text className="font-OnestSemiBold text-2xl text-[#94979C]">
+              <Text className="text-default-tertiary font-OnestSemiBold text-2xl">
                 Update {label}
               </Text>
               <View className="gap-1.5">
-                <Text className="font-OnestMedium text-sm text-[#CECFD2]">
+                <Text className="text-default-secondary font-OnestMedium text-sm">
                   {label2 || label}
                 </Text>
                 {key === 'phone' ? (
@@ -105,7 +105,9 @@ export default function UpdateInfoScreen() {
                       maxLength={10}
                     />
                     <View className="absolute bottom-0 left-3 top-[13px]">
-                      <Text className="text-base text-[#94979C]">+63</Text>
+                      <Text className="text-default-tertiary text-base">
+                        +63
+                      </Text>
                     </View>
                   </View>
                 ) : (

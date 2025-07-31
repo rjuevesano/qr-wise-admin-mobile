@@ -8,6 +8,11 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        default: {
+          primary: '#F7F7F7',
+          secondary: '#CECFD2',
+          tertiary: '#94979C',
+        },
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

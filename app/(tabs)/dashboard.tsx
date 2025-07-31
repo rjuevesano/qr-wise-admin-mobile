@@ -52,14 +52,14 @@ export default function DashboardScreen() {
       <SafeAreaView className="flex-1">
         <View className="flex-row items-center justify-between px-4 py-1">
           <View className="w-32">
-            <Text className="font-OnestSemiBold text-base text-[#F7F7F7]">
+            <Text className="text-default-primary font-OnestSemiBold text-base">
               {format(date, 'EEE, MMM d')}
             </Text>
           </View>
           <DropdownMenu>
             <DropdownMenuTrigger ref={dateRef} asChild>
               <TouchableOpacity className="flex-row items-center gap-1">
-                <Text className="font-OnestSemiBold text-base text-[#F7F7F7]">
+                <Text className="text-default-primary font-OnestSemiBold text-base">
                   Today
                 </Text>
                 <ChevronDownIcon color="#CECFD2" size="18" />
@@ -117,7 +117,7 @@ export default function DashboardScreen() {
             gap: 16,
           }}>
           <View className="flex-row items-center justify-between">
-            <Text className="font-OnestSemiBold text-2xl text-[#F7F7F7]">
+            <Text className="text-default-primary font-OnestSemiBold text-2xl">
               Good {getTimeOfDay()},{'\n'}
               {user?.name}
             </Text>
@@ -125,17 +125,17 @@ export default function DashboardScreen() {
           {/* total sales */}
           <View className="h-[136px] rounded-xl border border-[#22262F] bg-[#13161B] p-3">
             <View className="absolute left-3 top-3 z-10">
-              <Text className="font-OnestMedium text-xs text-[#CECFD2]">
+              <Text className="text-default-secondary font-OnestMedium text-xs">
                 Total Sales
               </Text>
-              <Text className="mt-2 font-OnestSemiBold text-2xl text-[#F7F7F7]">
+              <Text className="text-default-primary mt-2 font-OnestSemiBold text-2xl">
                 ₱34,291.20
               </Text>
               <View className="flex-row items-center gap-1">
                 <Text className="font-OnestRegular text-xs text-[#F97066]">
                   -40.14%
                 </Text>
-                <Text className="font-OnestRegular text-xs text-[#CECFD2]">
+                <Text className="text-default-secondary font-OnestRegular text-xs">
                   vs Jul 8
                 </Text>
               </View>
@@ -241,11 +241,11 @@ export default function DashboardScreen() {
                 />
               </Svg>
               <View className="gap-1">
-                <Text className="font-OnestMedium text-xs text-[#CECFD2]">
+                <Text className="text-default-secondary font-OnestMedium text-xs">
                   Total Transactions
                 </Text>
                 <View className="flex-row items-center gap-1">
-                  <Text className="font-OnestSemiBold text-[#F7F7F7]">
+                  <Text className="text-default-primary font-OnestSemiBold">
                     ₱51,385.50
                   </Text>
                   <Text className="font-OnestRegular text-[#47CD89]">+18%</Text>
@@ -264,24 +264,26 @@ export default function DashboardScreen() {
                 />
               </Svg>
               <View className="gap-1">
-                <Text className="font-OnestMedium text-xs text-[#CECFD2]">
+                <Text className="text-default-secondary font-OnestMedium text-xs">
                   In-store Customers
                 </Text>
                 <View className="flex-row items-center gap-1">
-                  <Text className="font-OnestSemiBold text-[#F7F7F7]">0</Text>
+                  <Text className="text-default-primary font-OnestSemiBold">
+                    0
+                  </Text>
                 </View>
               </View>
             </View>
           </View>
           {/* mode of transaction */}
           <View className="h-[136px] rounded-xl border border-[#22262F] bg-[#13161B] p-3">
-            <Text className="font-OnestMedium text-xs text-[#CECFD2]">
+            <Text className="text-default-secondary font-OnestMedium text-xs">
               Mode of Transaction
             </Text>
-            <Text className="mt-2 font-OnestSemiBold text-2xl text-[#F7F7F7]">
+            <Text className="text-default-primary mt-2 font-OnestSemiBold text-2xl">
               76% self-ordering
             </Text>
-            <Text className="font-OnestRegular text-xs text-[#CECFD2]">
+            <Text className="text-default-secondary font-OnestRegular text-xs">
               57 transactions
             </Text>
             <View className="absolute right-3 top-3">
@@ -311,13 +313,13 @@ export default function DashboardScreen() {
           {/* orders */}
           <View className="h-[136px] rounded-xl border border-[#22262F] bg-[#13161B] p-3">
             <View className="absolute left-3 top-3 z-10">
-              <Text className="font-OnestMedium text-xs text-[#CECFD2]">
+              <Text className="text-default-secondary font-OnestMedium text-xs">
                 Orders
               </Text>
-              <Text className="mt-2 font-OnestSemiBold text-2xl text-[#F7F7F7]">
+              <Text className="text-default-primary mt-2 font-OnestSemiBold text-2xl">
                 8 orders
               </Text>
-              <Text className="font-OnestRegular text-xs text-[#CECFD2]">
+              <Text className="text-default-secondary font-OnestRegular text-xs">
                 average last hour
               </Text>
             </View>
@@ -414,7 +416,7 @@ export default function DashboardScreen() {
           {/* product movement */}
           <View className="rounded-xl border border-[#22262F] bg-[#13161B] p-3">
             <View className="flex-row items-center justify-between">
-              <Text className="font-OnestMedium text-xs text-[#CECFD2]">
+              <Text className="text-default-secondary font-OnestMedium text-xs">
                 Product Movement
               </Text>
               <ChevronRightIcon color="#FFFFFF" />
@@ -422,10 +424,10 @@ export default function DashboardScreen() {
             <View className="mt-6 gap-2">
               <View className="flex-row items-center justify-between border-b border-[#22262F] pb-2">
                 <View>
-                  <Text className="font-OnestSemiBold text-lg text-[#F7F7F7]">
+                  <Text className="text-default-primary font-OnestSemiBold text-lg">
                     Pistachio Latte
                   </Text>
-                  <Text className="font-OnestRegular text-xs text-[#CECFD2]">
+                  <Text className="text-default-secondary font-OnestRegular text-xs">
                     22 units
                   </Text>
                 </View>
@@ -434,21 +436,21 @@ export default function DashboardScreen() {
                     <Text className="font-OnestRegular text-xs text-[#47CD89]">
                       +18%
                     </Text>
-                    <Text className="font-OnestSemiBold text-lg text-[#F7F7F7]">
+                    <Text className="text-default-primary font-OnestSemiBold text-lg">
                       ₱4,840.00
                     </Text>
                   </View>
-                  <Text className="text-right font-OnestRegular text-xs text-[#CECFD2]">
+                  <Text className="text-default-secondary text-right font-OnestRegular text-xs">
                     14.77%
                   </Text>
                 </View>
               </View>
               <View className="flex-row items-center justify-between border-b border-[#22262F] pb-2">
                 <View>
-                  <Text className="font-OnestSemiBold text-lg text-[#F7F7F7]">
+                  <Text className="text-default-primary font-OnestSemiBold text-lg">
                     Loca’s Ube Cheesecake
                   </Text>
-                  <Text className="font-OnestRegular text-xs text-[#CECFD2]">
+                  <Text className="text-default-secondary font-OnestRegular text-xs">
                     10 units
                   </Text>
                 </View>
@@ -457,21 +459,21 @@ export default function DashboardScreen() {
                     <Text className="font-OnestRegular text-xs text-[#47CD89]">
                       +23%
                     </Text>
-                    <Text className="font-OnestSemiBold text-lg text-[#F7F7F7]">
+                    <Text className="text-default-primary font-OnestSemiBold text-lg">
                       ₱3,950.00
                     </Text>
                   </View>
-                  <Text className="text-right font-OnestRegular text-xs text-[#CECFD2]">
+                  <Text className="text-default-secondary text-right font-OnestRegular text-xs">
                     12.05%
                   </Text>
                 </View>
               </View>
               <View className="flex-row items-center justify-between border-b border-[#22262F] pb-2">
                 <View>
-                  <Text className="font-OnestSemiBold text-lg text-[#F7F7F7]">
+                  <Text className="text-default-primary font-OnestSemiBold text-lg">
                     Classic Beef Tapa
                   </Text>
-                  <Text className="font-OnestRegular text-xs text-[#CECFD2]">
+                  <Text className="text-default-secondary font-OnestRegular text-xs">
                     6 units
                   </Text>
                 </View>
@@ -480,21 +482,21 @@ export default function DashboardScreen() {
                     <Text className="font-OnestRegular text-xs text-[#F97066]">
                       -10%
                     </Text>
-                    <Text className="font-OnestSemiBold text-lg text-[#F7F7F7]">
+                    <Text className="text-default-primary font-OnestSemiBold text-lg">
                       ₱3,360.00
                     </Text>
                   </View>
-                  <Text className="text-right font-OnestRegular text-xs text-[#CECFD2]">
+                  <Text className="text-default-secondary text-right font-OnestRegular text-xs">
                     10.25%
                   </Text>
                 </View>
               </View>
               <View className="flex-row items-center justify-between border-b border-[#22262F] pb-2">
                 <View>
-                  <Text className="font-OnestSemiBold text-lg text-[#F7F7F7]">
+                  <Text className="text-default-primary font-OnestSemiBold text-lg">
                     Miso Caramel-glazed Salmon
                   </Text>
-                  <Text className="font-OnestRegular text-xs text-[#CECFD2]">
+                  <Text className="text-default-secondary font-OnestRegular text-xs">
                     6 units
                   </Text>
                 </View>
@@ -503,21 +505,21 @@ export default function DashboardScreen() {
                     <Text className="font-OnestRegular text-xs text-[#F97066]">
                       -16%
                     </Text>
-                    <Text className="font-OnestSemiBold text-lg text-[#F7F7F7]">
+                    <Text className="text-default-primary font-OnestSemiBold text-lg">
                       ₱2,880.00
                     </Text>
                   </View>
-                  <Text className="text-right font-OnestRegular text-xs text-[#CECFD2]">
+                  <Text className="text-default-secondary text-right font-OnestRegular text-xs">
                     8.79%
                   </Text>
                 </View>
               </View>
               <View className="flex-row items-center justify-between pb-2">
                 <View>
-                  <Text className="font-OnestSemiBold text-lg text-[#F7F7F7]">
+                  <Text className="text-default-primary font-OnestSemiBold text-lg">
                     Crispy Pork Belly
                   </Text>
-                  <Text className="font-OnestRegular text-xs text-[#CECFD2]">
+                  <Text className="text-default-secondary font-OnestRegular text-xs">
                     5 units
                   </Text>
                 </View>
@@ -526,11 +528,11 @@ export default function DashboardScreen() {
                     <Text className="font-OnestRegular text-xs text-[#F97066]">
                       -2%
                     </Text>
-                    <Text className="font-OnestSemiBold text-lg text-[#F7F7F7]">
+                    <Text className="text-default-primary font-OnestSemiBold text-lg">
                       ₱2,100.00
                     </Text>
                   </View>
-                  <Text className="text-right font-OnestRegular text-xs text-[#CECFD2]">
+                  <Text className="text-default-secondary text-right font-OnestRegular text-xs">
                     6.41%
                   </Text>
                 </View>

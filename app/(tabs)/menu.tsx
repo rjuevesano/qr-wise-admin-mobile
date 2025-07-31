@@ -63,7 +63,7 @@ export default function MenuScreen() {
     <View className="flex-1 bg-[#0C0E12]">
       <SafeAreaView className="flex-1">
         <View className="flex-row items-center justify-between px-4 py-1">
-          <Text className="font-OnestSemiBold text-2xl text-[#F7F7F7]">
+          <Text className="text-default-primary font-OnestSemiBold text-2xl">
             Menu
           </Text>
         </View>
@@ -89,8 +89,8 @@ export default function MenuScreen() {
                 )}>
                 <Text
                   className={cn(
-                    'font-OnestSemiBold text-[#94979C]',
-                    tab === 'BEVERAGE' && 'text-[#CECFD2]',
+                    'text-default-tertiary font-OnestSemiBold',
+                    tab === 'BEVERAGE' && 'text-default-secondary',
                   )}>
                   Beverage
                 </Text>
@@ -104,8 +104,8 @@ export default function MenuScreen() {
                 )}>
                 <Text
                   className={cn(
-                    'font-OnestSemiBold text-[#94979C]',
-                    tab === 'FOOD' && 'text-[#CECFD2]',
+                    'text-default-tertiary font-OnestSemiBold',
+                    tab === 'FOOD' && 'text-default-secondary',
                   )}>
                   Food
                 </Text>
@@ -138,11 +138,11 @@ export default function MenuScreen() {
                 </View>
               </View>
               <TouchableOpacity className="h-12 flex-row items-center gap-2 rounded-lg border border-[#22262F] bg-[#13161B] px-3">
-                <Text className="font-OnestSemiBold text-sm text-[#CECFD2]">
+                <Text className="text-default-secondary font-OnestSemiBold text-sm">
                   Available
                 </Text>
                 <View className="w-fit rounded-full border border-[#373A41] bg-[#13161B] px-2 py-1">
-                  <Text className="font-OnestMedium text-xs text-[#CECFD2]">
+                  <Text className="text-default-secondary font-OnestMedium text-xs">
                     15
                   </Text>
                 </View>
@@ -151,10 +151,10 @@ export default function MenuScreen() {
             {filteredMenuItems.length === 0 ? (
               <View className="items-center justify-center rounded-lg border border-dashed border-gray-300 bg-[#13161B] p-10">
                 <InboxIcon
-                  className="mb-4 h-10 w-10 text-[#CECFD2]"
+                  className="text-default-secondary mb-4 h-10 w-10"
                   color="#CECFD2"
                 />
-                <Text className="font-OnestMedium text-lg text-[#CECFD2]">
+                <Text className="text-default-secondary font-OnestMedium text-lg">
                   No menu items available
                 </Text>
               </View>
@@ -200,10 +200,10 @@ export default function MenuScreen() {
                     </View>
                     <View className="mt-4 flex-row items-center justify-between">
                       <View className="gap-1">
-                        <Text className="font-OnestRegular text-xs text-[#F7F7F7]">
+                        <Text className="text-default-primary font-OnestRegular text-xs">
                           {item.name}
                         </Text>
-                        <Text className="font-OnestBold text-xs text-[#94979C]">
+                        <Text className="text-default-tertiary font-OnestBold text-xs">
                           {formatPrice(formatStringToNumber(item.price))}
                         </Text>
                       </View>

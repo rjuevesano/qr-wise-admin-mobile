@@ -69,7 +69,9 @@ export default function MainScreen() {
         <Button
           onPress={() => router.push('/login')}
           className="mx-4 mb-10 h-14 bg-[#0C0E12]">
-          <Text className="font-OnestSemiBold text-[#CECFD2]">Login</Text>
+          <Text className="text-default-secondary font-OnestSemiBold">
+            Login
+          </Text>
         </Button>
       </SafeAreaView>
     </LinearGradient>

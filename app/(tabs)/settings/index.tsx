@@ -20,7 +20,7 @@ export default function SettingsScreen() {
     <View className="flex-1 bg-[#0C0E12]">
       <SafeAreaView className="flex-1">
         <View className="flex-row items-center justify-between px-4 py-1">
-          <Text className="font-OnestSemiBold text-2xl text-[#F7F7F7]">
+          <Text className="text-default-primary font-OnestSemiBold text-2xl">
             Settings
           </Text>
         </View>
@@ -46,8 +46,8 @@ export default function SettingsScreen() {
                 )}>
                 <Text
                   className={cn(
-                    'font-OnestSemiBold text-[#94979C]',
-                    tab === 'GENERAL' && 'text-[#CECFD2]',
+                    'text-default-tertiary font-OnestSemiBold',
+                    tab === 'GENERAL' && 'text-default-secondary',
                   )}>
                   General
                 </Text>
@@ -61,8 +61,8 @@ export default function SettingsScreen() {
                 )}>
                 <Text
                   className={cn(
-                    'font-OnestSemiBold text-[#94979C]',
-                    tab === 'TAX' && 'text-[#CECFD2]',
+                    'text-default-tertiary font-OnestSemiBold',
+                    tab === 'TAX' && 'text-default-secondary',
                   )}>
                   Tax & Discounts
                 </Text>

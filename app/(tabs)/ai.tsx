@@ -24,7 +24,7 @@ export default function AIScreen() {
       <SafeAreaView className="flex-1">
         <View className="flex-row items-center justify-between px-4 py-1">
           <View className="size-10" />
-          <Text className="font-OnestSemiBold text-base text-[#F7F7F7]">
+          <Text className="text-default-primary font-OnestSemiBold text-base">
             Wise AI
           </Text>
           <View className="size-10" />
@@ -42,7 +42,7 @@ export default function AIScreen() {
         <View className="absolute bottom-[100px] left-0 right-0 p-5">
           <View className="rounded-xl bg-[#13161B] px-4 py-[14px]">
             <View className="flex-row items-center justify-between">
-              <Text className="font-OnestSemiBold text-sm text-[#F7F7F7]">
+              <Text className="text-default-primary font-OnestSemiBold text-sm">
                 Suggested questions
               </Text>
               <TouchableOpacity>
@@ -86,7 +86,7 @@ export default function AIScreen() {
                   </ClipPath>
                 </Defs>
               </Svg>
-              <Text className="font-OnestMedium text-[#F7F7F7]">
+              <Text className="text-default-primary font-OnestMedium">
                 Ask anything
               </Text>
             </View>

@@ -127,12 +127,12 @@ export default function AddEditDiscountScreen() {
               <View className="size-10" />
             </View>
             <View className="mt-5 gap-4 px-4">
-              <Text className="font-OnestSemiBold text-2xl text-[#94979C]">
+              <Text className="text-default-tertiary font-OnestSemiBold text-2xl">
                 {discountId ? 'Update Discount' : 'Add Another Discount'}
               </Text>
               <View className="gap-1.5">
                 <View className="flex-row items-center justify-between">
-                  <Text className="font-OnestMedium text-[#CECFD2]">
+                  <Text className="text-default-secondary font-OnestMedium">
                     Less VAT
                   </Text>
                   <Switch
@@ -146,7 +146,7 @@ export default function AddEditDiscountScreen() {
                 </View>
               </View>
               <View className="gap-1.5">
-                <Text className="font-OnestMedium text-[#CECFD2]">
+                <Text className="text-default-secondary font-OnestMedium">
                   Discount Type
                 </Text>
                 <Input
@@ -157,7 +157,7 @@ export default function AddEditDiscountScreen() {
                 />
               </View>
               <View className="gap-1.5">
-                <Text className="font-OnestMedium text-[#CECFD2]">
+                <Text className="text-default-secondary font-OnestMedium">
                   Discount Rate (%)
                 </Text>
                 <Input

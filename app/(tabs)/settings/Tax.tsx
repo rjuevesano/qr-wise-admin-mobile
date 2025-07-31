@@ -45,17 +45,17 @@ export default function Tax() {
   return (
     <>
       <View className="gap-2">
-        <Text className="font-OnestSemiBold text-[#F7F7F7]">
+        <Text className="text-default-primary font-OnestSemiBold">
           Value Added Tax
         </Text>
         <View className="gap-2 rounded-xl border border-[#22262F] bg-[#13161B] p-3">
           <TouchableOpacity
             onPress={() => showSnackbar('Contact support to change VAT')}
             className="gap-1">
-            <Text className="font-OnestMedium text-xs text-[#CECFD2]">
+            <Text className="text-default-secondary font-OnestMedium text-xs">
               Tax %
             </Text>
-            <Text className="font-OnestSemiBold text-base text-[#F7F7F7]">
+            <Text className="text-default-primary font-OnestSemiBold text-base">
               {store?.vatTaxPercentage}
             </Text>
             <View className="absolute bottom-0 right-0 top-0">
@@ -65,7 +65,7 @@ export default function Tax() {
         </View>
       </View>
       <View className="gap-2">
-        <Text className="font-OnestSemiBold text-[#F7F7F7]">
+        <Text className="text-default-primary font-OnestSemiBold">
           Service Charge
         </Text>
         <View className="gap-2 rounded-xl border border-[#22262F] bg-[#13161B] p-3">
@@ -76,10 +76,10 @@ export default function Tax() {
               )
             }
             className="gap-1">
-            <Text className="font-OnestMedium text-xs text-[#CECFD2]">
+            <Text className="text-default-secondary font-OnestMedium text-xs">
               Tax %
             </Text>
-            <Text className="font-OnestSemiBold text-base text-[#F7F7F7]">
+            <Text className="text-default-primary font-OnestSemiBold text-base">
               {store?.serviceChargePercentage}
             </Text>
             <View className="absolute bottom-0 right-0 top-0">
@@ -89,7 +89,9 @@ export default function Tax() {
         </View>
       </View>
       <View className="gap-2">
-        <Text className="font-OnestSemiBold text-[#F7F7F7]">To Go Charge</Text>
+        <Text className="text-default-primary font-OnestSemiBold">
+          To Go Charge
+        </Text>
         <View className="gap-2 rounded-xl border border-[#22262F] bg-[#13161B] p-3">
           <TouchableOpacity
             onPress={() =>
@@ -98,10 +100,10 @@ export default function Tax() {
               )
             }
             className="gap-1">
-            <Text className="font-OnestMedium text-xs text-[#CECFD2]">
+            <Text className="text-default-secondary font-OnestMedium text-xs">
               Charge (PHP)
             </Text>
-            <Text className="font-OnestSemiBold text-base text-[#F7F7F7]">
+            <Text className="text-default-primary font-OnestSemiBold text-base">
               {store?.togoCharge}
             </Text>
             <View className="absolute bottom-0 right-0 top-0">
@@ -111,14 +113,16 @@ export default function Tax() {
         </View>
       </View>
       <View className="gap-2">
-        <Text className="font-OnestSemiBold text-[#F7F7F7]">Discounts</Text>
+        <Text className="text-default-primary font-OnestSemiBold">
+          Discounts
+        </Text>
         {discounts.map((discount) => (
           <View
             key={discount.id}
             className="gap-2 rounded-xl border border-[#22262F] bg-[#13161B] p-3">
             <View className="flex-row items-center justify-between">
               <View className="flex-row items-center gap-2">
-                <Text className="font-OnestMedium text-sm text-[#CECFD2]">
+                <Text className="text-default-secondary font-OnestMedium text-sm">
                   Less VAT
                 </Text>
                 <Switch
@@ -137,19 +141,19 @@ export default function Tax() {
               </TouchableOpacity>
             </View>
             <View className="gap-1">
-              <Text className="font-OnestMedium text-xs text-[#CECFD2]">
+              <Text className="text-default-secondary font-OnestMedium text-xs">
                 Discount Type
               </Text>
-              <Text className="font-OnestSemiBold text-base text-[#F7F7F7]">
+              <Text className="text-default-primary font-OnestSemiBold text-base">
                 {discount.type}
               </Text>
             </View>
             <Separator className="bg-[#22262F]" />
             <View className="gap-1">
-              <Text className="font-OnestMedium text-xs text-[#CECFD2]">
+              <Text className="text-default-secondary font-OnestMedium text-xs">
                 Discount Rate (%)
               </Text>
-              <Text className="font-OnestSemiBold text-base text-[#F7F7F7]">
+              <Text className="text-default-primary font-OnestSemiBold text-base">
                 {discount.rate}
               </Text>
             </View>
@@ -159,7 +163,7 @@ export default function Tax() {
           onPress={() => router.push('/add-edit-discount')}
           className="flex-row items-center gap-1 border border-[#373A41] bg-[#0C0E12]">
           <PlusIcon color="#61656C" size="20" />
-          <Text className="text-[#CECFD2]">Add Another Discount</Text>
+          <Text className="text-default-secondary">Add Another Discount</Text>
         </Button>
       </View>
     </>
