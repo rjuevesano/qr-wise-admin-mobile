@@ -201,9 +201,11 @@ export default function MenuScreen() {
                         </Svg>
                       </TouchableOpacity>
                     </View>
-                    <View className="mt-4 flex-row items-center justify-between">
-                      <View className="gap-1">
-                        <Text className="font-OnestRegular text-xs text-default-primary">
+                    <View className="mt-4 flex-row items-center justify-between gap-4">
+                      <View className="flex-1 gap-1">
+                        <Text
+                          className="font-OnestRegular text-xs text-default-primary"
+                          numberOfLines={1}>
                           {item.name}
                         </Text>
                         <Text className="font-OnestBold text-xs text-default-tertiary">
