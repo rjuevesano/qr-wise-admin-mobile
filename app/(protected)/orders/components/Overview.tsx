@@ -1,7 +1,6 @@
 import { format, isToday } from 'date-fns';
 import { Text, View } from 'react-native';
 import useCurrentHour from '~/hooks/useCurrentHour';
-import { formatPrice } from '~/lib/utils';
 import { Transaction } from '~/types';
 
 export default function Overview({
@@ -17,47 +16,45 @@ export default function Overview({
 }) {
   const currentHour = useCurrentHour();
 
-  const totalSalesLastWeekOfTodayWithVatInc = transactionsWeekOfToday
+  const totalOrdersLastWeek = transactionsWeekOfToday
     .filter((t) => {
       const createdAt = t.createdAt?.toDate?.();
       return createdAt.getHours() <= currentHour;
     })
-    .map((transaction) => transaction.amount)
-    .reduce((acc, i) => acc + i, 0);
+    .map((transaction) => transaction.orderIds)
+    .reduce((acc, i) => acc + i.length, 0);
 
-  const totalSalesTodayWithVatInc = transactionsToday
+  const totalOrdersToday = transactionsToday
     .filter((t) => {
       const createdAt = t.createdAt?.toDate?.();
       return createdAt.getHours() <= currentHour;
     })
-    .map((transaction) => transaction.amount)
-    .reduce((acc, i) => acc + i, 0);
+    .map((transaction) => transaction.orderIds)
+    .reduce((acc, i) => acc + i.length, 0);
 
-  const totalSalesPercentage =
-    totalSalesLastWeekOfTodayWithVatInc === 0
-      ? totalSalesTodayWithVatInc > 0
+  const totalOrdersPercentage =
+    totalOrdersLastWeek === 0
+      ? totalOrdersToday > 0
         ? 100
         : 0
-      : ((totalSalesTodayWithVatInc - totalSalesLastWeekOfTodayWithVatInc) /
-          totalSalesLastWeekOfTodayWithVatInc) *
-        100;
+      : ((totalOrdersToday - totalOrdersLastWeek) / totalOrdersLastWeek) * 100;
 
   return (
     <View className="gap-1">
       <Text className="text-default-tertiary font-OnestSemiBold text-2xl">
-        Total Sales
+        Orders
       </Text>
       <View className="flex-row items-center gap-2">
         <Text className="text-default-primary font-OnestSemiBold text-2xl">
-          {formatPrice(totalSalesTodayWithVatInc)}
+          {totalOrdersToday}
         </Text>
-        {totalSalesTodayWithVatInc > totalSalesLastWeekOfTodayWithVatInc ? (
+        {totalOrdersToday > totalOrdersLastWeek ? (
           <Text className="font-OnestRegular text-sm text-[#47CD89]">
-            {totalSalesPercentage.toFixed(2)}%
+            {totalOrdersPercentage.toFixed(2)}%
           </Text>
         ) : (
           <Text className="font-OnestRegular text-sm text-[#F97066]">
-            {totalSalesPercentage.toFixed(2)}%
+            {totalOrdersPercentage.toFixed(2)}%
           </Text>
         )}
         <Text className="text-default-secondary font-OnestRegular text-sm">

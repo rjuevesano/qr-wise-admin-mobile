@@ -31,15 +31,16 @@ export default function TotalSales({ date }: { date: Date }) {
   const totalSalesLastWeekOfTodayWithVatInc = (transactionsWeekOfToday || [])
     .filter((t) => {
       const createdAt = t.createdAt?.toDate?.();
-      if (createdAt && isToday(createdAt)) {
-        return createdAt.getHours() <= currentHour;
-      }
-      return true;
+      return createdAt.getHours() <= currentHour;
     })
     .map((transaction) => transaction.amount)
     .reduce((acc, i) => acc + i, 0);
 
   const totalSalesTodayWithVatInc = (transactionsToday || [])
+    .filter((t) => {
+      const createdAt = t.createdAt?.toDate?.();
+      return createdAt.getHours() <= currentHour;
+    })
     .map((transaction) => transaction.amount)
     .reduce((acc, i) => acc + i, 0);
 

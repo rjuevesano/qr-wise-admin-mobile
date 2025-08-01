@@ -2,7 +2,7 @@ import { endOfDay, format, startOfDay } from 'date-fns';
 import { TrendingDown, TrendingUp } from 'lucide-react-native';
 import { Text, View } from 'react-native';
 import { LineChart } from 'react-native-gifted-charts';
-import { cn, formatNumber, formatStringToNumber } from '~/lib/utils';
+import { cn } from '~/lib/utils';
 import { Transaction } from '~/types';
 
 export default function LineGraphChart({
@@ -16,7 +16,7 @@ export default function LineGraphChart({
   transactionsWeekOfToday: Transaction[];
   transactionsToday: Transaction[];
 }) {
-  // Set start and end hour range (6 AM to 8 AM)
+  // Set start and end hour range (6 AM to 8 PM)
   const HOUR_RANGE = Array.from({ length: 15 }, (_, i) => i + 6);
   const startDate = startOfDay(dateToday);
   const endDate = endOfDay(dateToday);
@@ -31,24 +31,24 @@ export default function LineGraphChart({
     lastWeekMap[hour] = 0;
   });
 
-  // Sales per hour (TODAY)
+  // Orders per hour (TODAY)
   transactionsToday.forEach((tx) => {
     const txDate = tx.paymentSuccessAt?.toDate?.() || tx.createdAt?.toDate?.();
     if (txDate >= startDate && txDate <= endDate) {
       const hour = txDate.getHours();
       if (todayMap[hour] !== undefined) {
-        todayMap[hour] += tx.amount || 0;
+        todayMap[hour] += tx.orderIds.length || 0;
       }
     }
   });
 
-  // Sales per hour (LAST WEEK)
+  // Orders per hour (LAST WEEK)
   transactionsWeekOfToday.forEach((tx) => {
     const txDate = tx.paymentSuccessAt?.toDate?.() || tx.createdAt?.toDate?.();
     if (txDate >= startLastWeek && txDate <= endLastWeek) {
       const hour = txDate.getHours();
       if (lastWeekMap[hour] !== undefined) {
-        lastWeekMap[hour] += tx.amount || 0;
+        lastWeekMap[hour] += tx.orderIds.length || 0;
       }
     }
   });
@@ -98,16 +98,13 @@ export default function LineGraphChart({
         endOpacity={0.01}
         noOfSections={5}
         stepHeight={40}
-        maxValue={maxValue + 180}
+        maxValue={maxValue}
         yAxisThickness={0}
         yAxisTextStyle={{
           color: '#94979C',
           fontFamily: 'OnestMedium',
           fontSize: 12,
         }}
-        formatYLabel={(value) =>
-          `₱${formatNumber(formatStringToNumber(value))}`
-        }
         xAxisColor="#E5E7EB"
         xAxisLabelTextStyle={{
           color: '#383838',
@@ -145,14 +142,13 @@ export default function LineGraphChart({
                 <View className="flex-row items-center gap-1">
                   <View className="size-2 rounded-full bg-[#C2F93A]" />
                   <Text className="text-default-secondary font-OnestMedium text-sm">
-                    Today: ₱{formatNumber(items[0].value)}
+                    Today: {items[0].value}
                   </Text>
                 </View>
                 <View className="flex-row items-center gap-1">
                   <View className="size-2 rounded-full bg-[#36BFFA]" />
                   <Text className="text-default-secondary font-OnestMedium text-sm">
-                    {format(new Date(), "'Last' EEEE")}: ₱
-                    {formatNumber(items[1].value)}
+                    {format(new Date(), "'Last' EEEE")}: {items[1].value}
                   </Text>
                 </View>
                 <View className="flex-row items-center gap-1">

@@ -11,11 +11,10 @@ import { Text, View } from 'react-native';
 import { BarChart } from 'react-native-gifted-charts';
 import useCurrentHour from '~/hooks/useCurrentHour';
 import { useTransactionsQuery } from '~/hooks/useTransactionsQuery';
-import { formatNumber } from '~/lib/utils';
 import { Transaction } from '~/types';
 
-function getSalesByDate(transactions: Transaction[]) {
-  const salesMap: Record<string, number> = {};
+function getOrdersByDate(transactions: Transaction[]) {
+  const ordersMap: Record<string, number> = {};
 
   transactions.forEach((transaction) => {
     const createdAt = transaction.createdAt?.toDate?.();
@@ -23,14 +22,14 @@ function getSalesByDate(transactions: Transaction[]) {
 
     const dateKey = format(createdAt, 'dd MMM yyyy'); // e.g. "10 Mar 2025"
 
-    if (!salesMap[dateKey]) {
-      salesMap[dateKey] = 0;
+    if (!ordersMap[dateKey]) {
+      ordersMap[dateKey] = 0;
     }
 
-    salesMap[dateKey] += transaction.amount;
+    ordersMap[dateKey] += transaction.orderIds.length;
   });
 
-  return salesMap;
+  return ordersMap;
 }
 
 export default function BarGraphChart({ dateToday }: { dateToday: Date }) {
@@ -74,8 +73,7 @@ export default function BarGraphChart({ dateToday }: { dateToday: Date }) {
     );
   });
 
-  // Map sales per date
-  const salesMapThisWeek = getSalesByDate(transactionsSecondWeek);
+  const ordersMapThisWeek = getOrdersByDate(transactionsSecondWeek);
 
   // Build 7-day aligned chart using second week's dates
   const secondWeekDays = eachDayOfInterval({
@@ -85,7 +83,7 @@ export default function BarGraphChart({ dateToday }: { dateToday: Date }) {
 
   const chartData = secondWeekDays.map((day) => {
     const thisWeekKey = format(day, 'dd MMM yyyy');
-    const value = salesMapThisWeek[thisWeekKey] || 0;
+    const value = ordersMapThisWeek[thisWeekKey] || 0;
 
     return {
       value,
@@ -97,12 +95,10 @@ export default function BarGraphChart({ dateToday }: { dateToday: Date }) {
       ...(value > 0 && {
         topLabelComponent: () =>
           isToday(day) ? (
-            <Text className="text-default-secondary mb-1 text-xs">
-              ₱{formatNumber(value)}
-            </Text>
+            <Text className="text-default-secondary mb-1 text-xs">{value}</Text>
           ) : (
             <Text className="text-default-secondary -mb-5 text-xs">
-              ₱{formatNumber(value)}
+              {value}
             </Text>
           ),
       }),

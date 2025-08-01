@@ -2,7 +2,6 @@ import {
   eachDayOfInterval,
   endOfDay,
   format,
-  isToday,
   startOfDay,
   subDays,
 } from 'date-fns';
@@ -73,12 +72,7 @@ export default function BarGraphChart({ dateToday }: { dateToday: Date }) {
   const ttransactions = useMemo(() => {
     return (transactions || []).filter((t) => {
       const createdAt = t.createdAt?.toDate?.();
-
-      if (createdAt && isToday(createdAt)) {
-        return createdAt.getHours() <= currentHour;
-      }
-
-      return true;
+      return createdAt.getHours() <= currentHour;
     });
   }, [transactions, currentHour]);
 

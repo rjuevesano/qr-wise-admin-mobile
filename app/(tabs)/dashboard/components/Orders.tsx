@@ -1,6 +1,8 @@
+import { format } from 'date-fns';
+import { router } from 'expo-router';
 import { ChevronRightIcon } from 'lucide-react-native';
 import { useMemo } from 'react';
-import { Text, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import Chart from '~/components/icons/Chart';
 import useCurrentHour from '~/hooks/useCurrentHour';
 import { useTransactionsQuery } from '~/hooks/useTransactionsQuery';
@@ -30,7 +32,9 @@ export default function Orders({ date }: { date: Date }) {
   const averageTotalOrders = Math.round(Math.round((average || 0) * 10) / 10);
 
   return (
-    <View className="h-[136px] rounded-xl border border-[#22262F] bg-[#13161B] p-3">
+    <TouchableOpacity
+      onPress={() => router.push(`/orders?date=${format(date, 'yyyy-MM-dd')}`)}
+      className="h-[136px] rounded-xl border border-[#22262F] bg-[#13161B] p-3">
       <View className="absolute left-3 top-3 z-10">
         <Text className="text-default-secondary font-OnestMedium text-xs">
           Orders
@@ -48,6 +52,6 @@ export default function Orders({ date }: { date: Date }) {
       <View className="mt-3 overflow-hidden">
         <Chart />
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
