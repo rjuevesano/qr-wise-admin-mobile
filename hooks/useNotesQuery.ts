@@ -36,7 +36,6 @@ const fetchNotes = async ({
 
   const q = query(collection(db, 'notes'), ...queryConstraints);
   const querySnapshot = await getDocs(q);
-  console.log('querySnapshot', querySnapshot);
 
   const notes = await Promise.all(
     querySnapshot.docs.map(async (docSnap) => {

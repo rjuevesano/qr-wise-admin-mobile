@@ -53,7 +53,6 @@ export default function AddEditDiscountScreen() {
           rate: '',
           isSpecial: false,
         };
-        console.log('==', discount);
         setDiscount(discount);
         setDiscounts(store.discounts);
       }
@@ -65,7 +64,16 @@ export default function AddEditDiscountScreen() {
     setLoading(true);
 
     const ref = doc(db, 'stores', store?.id!);
-    const updatedDiscounts = [...discounts, discount];
+    const updatedDiscounts = [...discounts];
+
+    if (discountId) {
+      const discountIndex = updatedDiscounts.findIndex(
+        (i) => i.id === discountId,
+      );
+      updatedDiscounts[discountIndex] = discount!;
+    } else {
+      updatedDiscounts.push(discount!);
+    }
 
     await updateDoc(ref, {
       discounts: updatedDiscounts,
@@ -127,12 +135,12 @@ export default function AddEditDiscountScreen() {
               <View className="size-10" />
             </View>
             <View className="mt-5 gap-4 px-4">
-              <Text className="text-default-tertiary font-OnestSemiBold text-2xl">
+              <Text className="font-OnestSemiBold text-2xl text-default-tertiary">
                 {discountId ? 'Update Discount' : 'Add Another Discount'}
               </Text>
               <View className="gap-1.5">
                 <View className="flex-row items-center justify-between">
-                  <Text className="text-default-secondary font-OnestMedium">
+                  <Text className="font-OnestMedium text-default-secondary">
                     Less VAT
                   </Text>
                   <Switch
@@ -146,7 +154,7 @@ export default function AddEditDiscountScreen() {
                 </View>
               </View>
               <View className="gap-1.5">
-                <Text className="text-default-secondary font-OnestMedium">
+                <Text className="font-OnestMedium text-default-secondary">
                   Discount Type
                 </Text>
                 <Input
@@ -157,7 +165,7 @@ export default function AddEditDiscountScreen() {
                 />
               </View>
               <View className="gap-1.5">
-                <Text className="text-default-secondary font-OnestMedium">
+                <Text className="font-OnestMedium text-default-secondary">
                   Discount Rate (%)
                 </Text>
                 <Input
