@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { PlusIcon } from 'lucide-react-native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';
 import { Button } from '~/components/ui/button';
 import { Textarea } from '~/components/ui/textarea';
@@ -9,7 +9,13 @@ import { useAuth } from '~/context/AuthUserContext';
 import { useNotesQuery } from '~/hooks/useNotesQuery';
 import { db } from '~/lib/firebase';
 
-export default function Notes({ dateToday }: { dateToday: Date }) {
+export default function Notes({
+  dateToday,
+  refreshing,
+}: {
+  dateToday: Date;
+  refreshing: boolean;
+}) {
   const { store } = useAuth();
   const { data: notes, refetch } = useNotesQuery(
     {
@@ -21,6 +27,13 @@ export default function Notes({ dateToday }: { dateToday: Date }) {
   const [addNote, setAddNote] = useState<boolean>(false);
   const [note, setNote] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (refreshing) {
+      refetch?.();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refreshing]);
 
   async function handleSaveNote() {
     setLoading(true);

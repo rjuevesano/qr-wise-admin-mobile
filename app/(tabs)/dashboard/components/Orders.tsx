@@ -1,23 +1,36 @@
 import { format } from 'date-fns';
 import { router } from 'expo-router';
 import { ChevronRightIcon } from 'lucide-react-native';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import Chart from '~/components/icons/Chart';
 import useCurrentHour from '~/hooks/useCurrentHour';
 import { useTransactionsQuery } from '~/hooks/useTransactionsQuery';
 
-export default function Orders({ date }: { date: Date }) {
+export default function Orders({
+  date,
+  refreshing,
+}: {
+  date: Date;
+  refreshing: boolean;
+}) {
   const currentHour = useCurrentHour();
   const dateToday = useMemo(() => new Date(date), [date]);
 
-  const { data: transactions } = useTransactionsQuery(
+  const { data: transactions, refetch } = useTransactionsQuery(
     {
       status: 'SUCCESS',
       date: dateToday,
     },
     'total-sales',
   );
+
+  useEffect(() => {
+    if (refreshing) {
+      refetch?.();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refreshing]);
 
   const recentTransactions = (transactions || []).filter((t) => {
     const createdAt = t.createdAt?.toDate?.();

@@ -1,6 +1,12 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import { useMemo } from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  RefreshControl,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Path } from 'react-native-svg';
 import { useTransactionsQuery } from '~/hooks/useTransactionsQuery';
@@ -14,13 +20,31 @@ export default function ModeOfTransactionsScreen() {
 
   const dateToday = useMemo(() => new Date(date), [date]);
 
-  const { data: transactions } = useTransactionsQuery(
+  const { data: transactions, refetch } = useTransactionsQuery(
     {
       status: 'SUCCESS',
       date: dateToday,
     },
     'total-sales',
   );
+
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (refreshing) {
+      refetch?.();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refreshing]);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+
+    // Simulate fetch or refetch here
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
   return (
     <View className="flex-1 bg-[#0C0E12]">
@@ -53,9 +77,12 @@ export default function ModeOfTransactionsScreen() {
             paddingBottom: 120,
             paddingHorizontal: 16,
             gap: 16,
-          }}>
+          }}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }>
           <Overview transactions={transactions || []} />
-          <BarGraphChart dateToday={dateToday} />
+          <BarGraphChart dateToday={dateToday} refreshing={refreshing} />
           <PieGraphChart transactions={transactions || []} />
           <Insight transactions={transactions || []} />
         </ScrollView>

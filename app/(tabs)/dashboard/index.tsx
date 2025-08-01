@@ -7,7 +7,13 @@ import {
   ChevronRightIcon,
 } from 'lucide-react-native';
 import { useCallback, useRef, useState } from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import {
+  RefreshControl,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {
   SafeAreaView,
   useSafeAreaInsets,
@@ -44,8 +50,8 @@ export default function DashboardScreen() {
   const defaultStyles = useDefaultStyles('dark');
   const dateRef = useRef(null);
   const [date, setDate] = useState<Date>(new Date());
-
   const [weatherData, setWeatherData] = useState<WeatherType | null>(null);
+  const [refreshing, setRefreshing] = useState<boolean>(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -64,6 +70,15 @@ export default function DashboardScreen() {
       console.error(error);
     }
   };
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+
+    // Simulate fetch or refetch here
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
   return (
     <View className="flex-1 bg-[#0C0E12]">
@@ -133,7 +148,10 @@ export default function DashboardScreen() {
             paddingBottom: 140,
             paddingHorizontal: 16,
             gap: 16,
-          }}>
+          }}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }>
           <View className="flex-row items-center justify-between">
             <Text className="text-default-primary font-OnestSemiBold text-2xl">
               Good {getTimeOfDay()},{'\n'}
@@ -143,10 +161,10 @@ export default function DashboardScreen() {
               <DailyWeatherForecast dailyData={[weatherData.daily?.[0]]} />
             )}
           </View>
-          <TotalSales date={date} />
-          <TotalTransactionsAndCustomers date={date} />
-          <ModeOfTransactions date={date} />
-          <Orders date={date} />
+          <TotalSales date={date} refreshing={refreshing} />
+          <TotalTransactionsAndCustomers date={date} refreshing={refreshing} />
+          <ModeOfTransactions date={date} refreshing={refreshing} />
+          <Orders date={date} refreshing={refreshing} />
           {/* product movement */}
           <View className="rounded-xl border border-[#22262F] bg-[#13161B] p-3">
             <View className="flex-row items-center justify-between">

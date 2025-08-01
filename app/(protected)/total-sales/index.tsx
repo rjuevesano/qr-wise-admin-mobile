@@ -1,7 +1,13 @@
 import { subDays } from 'date-fns';
 import { router, useLocalSearchParams } from 'expo-router';
-import { useMemo } from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  RefreshControl,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Path } from 'react-native-svg';
 import { useTransactionsQuery } from '~/hooks/useTransactionsQuery';
@@ -16,20 +22,43 @@ export default function TotalSalesScreen() {
   const dateToday = useMemo(() => new Date(date), [date]);
   const lastWeekOfToday = useMemo(() => subDays(dateToday, 7), [dateToday]);
 
-  const { data: transactionsToday } = useTransactionsQuery(
-    {
-      status: 'SUCCESS',
-      date: dateToday,
-    },
-    'total-sales',
-  );
-  const { data: transactionsWeekOfToday } = useTransactionsQuery(
+  const { data: transactionsToday, refetch: refetchTransactionsToday } =
+    useTransactionsQuery(
+      {
+        status: 'SUCCESS',
+        date: dateToday,
+      },
+      'total-sales',
+    );
+  const {
+    data: transactionsWeekOfToday,
+    refetch: refetchTransactionsWeekOfToday,
+  } = useTransactionsQuery(
     {
       status: 'SUCCESS',
       date: lastWeekOfToday,
     },
     'total-sales',
   );
+
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (refreshing) {
+      refetchTransactionsToday?.();
+      refetchTransactionsWeekOfToday?.();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refreshing]);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+
+    // Simulate fetch or refetch here
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
   return (
     <View className="flex-1 bg-[#0C0E12]">
@@ -62,14 +91,17 @@ export default function TotalSalesScreen() {
             paddingBottom: 120,
             paddingHorizontal: 16,
             gap: 16,
-          }}>
+          }}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }>
           <Overview
             dateToday={dateToday}
             lastWeekOfToday={lastWeekOfToday}
             transactionsWeekOfToday={transactionsWeekOfToday || []}
             transactionsToday={transactionsToday || []}
           />
-          <BarGraphChart dateToday={dateToday} />
+          <BarGraphChart dateToday={dateToday} refreshing={refreshing} />
           <LineGraphChart
             dateToday={dateToday}
             lastWeekOfToday={lastWeekOfToday}

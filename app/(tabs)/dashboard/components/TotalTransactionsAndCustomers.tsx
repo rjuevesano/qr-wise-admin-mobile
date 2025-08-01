@@ -1,31 +1,45 @@
 import { subDays } from 'date-fns';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Text, View } from 'react-native';
 import Svg, { Path, Rect } from 'react-native-svg';
 import { useTransactionsQuery } from '~/hooks/useTransactionsQuery';
 
 export default function TotalTransactionsAndCustomers({
   date,
+  refreshing,
 }: {
   date: Date;
+  refreshing: boolean;
 }) {
   const dateToday = useMemo(() => new Date(date), [date]);
   const lastWeekOfToday = useMemo(() => subDays(dateToday, 7), [dateToday]);
 
-  const { data: transactionsToday } = useTransactionsQuery(
-    {
-      status: 'SUCCESS',
-      date: dateToday,
-    },
-    'total-sales',
-  );
-  const { data: transactionsWeekOfToday } = useTransactionsQuery(
+  const { data: transactionsToday, refetch: refetchTransactionsToday } =
+    useTransactionsQuery(
+      {
+        status: 'SUCCESS',
+        date: dateToday,
+      },
+      'total-sales',
+    );
+  const {
+    data: transactionsWeekOfToday,
+    refetch: refetchTransactionsWeekOfToday,
+  } = useTransactionsQuery(
     {
       status: 'SUCCESS',
       date: lastWeekOfToday,
     },
     'total-sales',
   );
+
+  useEffect(() => {
+    if (refreshing) {
+      refetchTransactionsToday?.();
+      refetchTransactionsWeekOfToday?.();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refreshing]);
 
   const countLastWeekOfToday = (transactionsWeekOfToday || []).length;
   const countToday = (transactionsToday || []).length;

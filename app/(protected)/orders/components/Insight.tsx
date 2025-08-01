@@ -14,11 +14,13 @@ export default function Insight({
   lastWeekOfToday,
   transactionsWeekOfToday,
   transactionsToday,
+  refreshing,
 }: {
   dateToday: Date;
   lastWeekOfToday: Date;
   transactionsWeekOfToday: Transaction[];
   transactionsToday: Transaction[];
+  refreshing: boolean;
 }) {
   const currentHour = useCurrentHour();
   const hour12 = currentHour % 12 === 0 ? 12 : currentHour % 12;
@@ -115,7 +117,7 @@ export default function Insight({
           </View>
         </View>
       </View>
-      <Notes dateToday={dateToday} />
+      <Notes dateToday={dateToday} refreshing={refreshing} />
       <View className="gap-2 rounded-xl border border-[#22262F] bg-[#13161B] p-3">
         <View className="flex-row items-center gap-2">
           <WiseAi />

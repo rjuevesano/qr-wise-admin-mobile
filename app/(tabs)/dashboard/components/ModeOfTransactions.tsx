@@ -1,22 +1,36 @@
 import { format } from 'date-fns';
 import { router } from 'expo-router';
 import { ChevronRightIcon } from 'lucide-react-native';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { useTransactionsQuery } from '~/hooks/useTransactionsQuery';
 
 type SourceType = 'DINER' | 'KIOSK' | 'SERVICE';
 
-export default function ModeOfTransactions({ date }: { date: Date }) {
+export default function ModeOfTransactions({
+  date,
+  refreshing,
+}: {
+  date: Date;
+  refreshing: boolean;
+}) {
   const dateToday = useMemo(() => new Date(date), [date]);
-  const { data: transactions } = useTransactionsQuery(
-    {
-      status: 'SUCCESS',
-      date: dateToday,
-    },
-    'total-sales',
-  );
+  const { data: transactions, refetch: refetchTransactions } =
+    useTransactionsQuery(
+      {
+        status: 'SUCCESS',
+        date: dateToday,
+      },
+      'total-sales',
+    );
+
+  useEffect(() => {
+    if (refreshing) {
+      refetchTransactions?.();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refreshing]);
 
   const sourceTotals: Record<SourceType, number> = {
     DINER: 0,

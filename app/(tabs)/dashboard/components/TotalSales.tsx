@@ -1,32 +1,50 @@
 import { format, isToday, subDays } from 'date-fns';
 import { router } from 'expo-router';
 import { ChevronRightIcon } from 'lucide-react-native';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import Chart from '~/components/icons/Chart';
 import useCurrentHour from '~/hooks/useCurrentHour';
 import { useTransactionsQuery } from '~/hooks/useTransactionsQuery';
 import { formatPrice } from '~/lib/utils';
 
-export default function TotalSales({ date }: { date: Date }) {
+export default function TotalSales({
+  date,
+  refreshing,
+}: {
+  date: Date;
+  refreshing: boolean;
+}) {
   const currentHour = useCurrentHour();
   const dateToday = useMemo(() => new Date(date), [date]);
   const lastWeekOfToday = useMemo(() => subDays(dateToday, 7), [dateToday]);
 
-  const { data: transactionsToday } = useTransactionsQuery(
-    {
-      status: 'SUCCESS',
-      date: dateToday,
-    },
-    'total-sales',
-  );
-  const { data: transactionsWeekOfToday } = useTransactionsQuery(
+  const { data: transactionsToday, refetch: refetchTransactionsToday } =
+    useTransactionsQuery(
+      {
+        status: 'SUCCESS',
+        date: dateToday,
+      },
+      'total-sales',
+    );
+  const {
+    data: transactionsWeekOfToday,
+    refetch: refetchTransactionsWeekOfToday,
+  } = useTransactionsQuery(
     {
       status: 'SUCCESS',
       date: lastWeekOfToday,
     },
     'total-sales',
   );
+
+  useEffect(() => {
+    if (refreshing) {
+      refetchTransactionsToday?.();
+      refetchTransactionsWeekOfToday?.();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refreshing]);
 
   const totalSalesLastWeekOfTodayWithVatInc = (transactionsWeekOfToday || [])
     .filter((t) => {

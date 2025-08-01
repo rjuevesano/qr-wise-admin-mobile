@@ -5,7 +5,7 @@ import {
   startOfDay,
   subDays,
 } from 'date-fns';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { View } from 'react-native';
 import { BarChart } from 'react-native-gifted-charts';
 import useCurrentHour from '~/hooks/useCurrentHour';
@@ -43,7 +43,13 @@ function getSourceByDate(transactions: Transaction[]) {
   return sourceMap;
 }
 
-export default function BarGraphChart({ dateToday }: { dateToday: Date }) {
+export default function BarGraphChart({
+  dateToday,
+  refreshing,
+}: {
+  dateToday: Date;
+  refreshing: boolean;
+}) {
   const currentHour = useCurrentHour();
   const endOfSecondWeek = useMemo(() => dateToday, [dateToday]);
   const startOfSecondWeek = useMemo(
@@ -60,7 +66,11 @@ export default function BarGraphChart({ dateToday }: { dateToday: Date }) {
     [endOfFirstWeek],
   );
 
-  const { data: transactions, isLoading } = useTransactionsQuery(
+  const {
+    data: transactions,
+    isLoading,
+    refetch,
+  } = useTransactionsQuery(
     {
       status: 'SUCCESS',
       date: endOfSecondWeek,
@@ -68,6 +78,13 @@ export default function BarGraphChart({ dateToday }: { dateToday: Date }) {
     },
     'total-sales',
   );
+
+  useEffect(() => {
+    if (refreshing) {
+      refetch?.();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refreshing]);
 
   const ttransactions = useMemo(() => {
     return (transactions || []).filter((t) => {
