@@ -23,7 +23,26 @@ function summarizeHourly(transactions: Transaction[]): HourlySummary {
     summary[hour].orders += 1;
   }
 
-  return summary;
+  // Sort by 24-hour equivalent
+  const sortedEntries = Object.entries(summary).sort(([a], [b]) => {
+    const to24h = (hourStr: string) => {
+      const [h, period] = hourStr.split(' ');
+      let hour = parseInt(h);
+      if (period === 'PM' && hour !== 12) hour += 12;
+      if (period === 'AM' && hour === 12) hour = 0;
+      return hour;
+    };
+
+    return to24h(a) - to24h(b);
+  });
+
+  // Convert back to object (optional: use Object.fromEntries)
+  const sortedSummary: HourlySummary = {};
+  for (const [hour, data] of sortedEntries) {
+    sortedSummary[hour] = data;
+  }
+
+  return sortedSummary;
 }
 
 export function useSalesInsightGPT({

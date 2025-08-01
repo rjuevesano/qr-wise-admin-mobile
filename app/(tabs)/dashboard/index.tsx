@@ -15,7 +15,6 @@ import {
 import Svg, { Path } from 'react-native-svg';
 import DateTimePicker, { useDefaultStyles } from 'react-native-ui-datepicker';
 import FloatingMenu from '~/components/FloatingMenu';
-import Chart from '~/components/icons/Chart';
 import Logo from '~/components/icons/Logo';
 import {
   DropdownMenu,
@@ -28,6 +27,7 @@ import DailyWeatherForecast, {
 import { useAuth } from '~/context/AuthUserContext';
 import { getTimeOfDay } from '~/lib/utils';
 import ModeOfTransactions from './components/ModeOfTransactions';
+import Orders from './components/Orders';
 import TotalSales from './components/TotalSales';
 import TotalTransactionsAndCustomers from './components/TotalTransactionsAndCustomers';
 
@@ -146,26 +146,7 @@ export default function DashboardScreen() {
           <TotalSales date={date} />
           <TotalTransactionsAndCustomers date={date} />
           <ModeOfTransactions date={date} />
-          {/* orders */}
-          <View className="h-[136px] rounded-xl border border-[#22262F] bg-[#13161B] p-3">
-            <View className="absolute left-3 top-3 z-10">
-              <Text className="text-default-secondary font-OnestMedium text-xs">
-                Orders
-              </Text>
-              <Text className="text-default-primary mt-2 font-OnestSemiBold text-2xl">
-                8 orders
-              </Text>
-              <Text className="text-default-secondary font-OnestRegular text-xs">
-                average last hour
-              </Text>
-            </View>
-            <View className="absolute right-3 top-3">
-              <ChevronRightIcon color="#FFFFFF" />
-            </View>
-            <View className="mt-3 overflow-hidden">
-              <Chart />
-            </View>
-          </View>
+          <Orders date={date} />
           {/* product movement */}
           <View className="rounded-xl border border-[#22262F] bg-[#13161B] p-3">
             <View className="flex-row items-center justify-between">
