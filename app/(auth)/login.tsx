@@ -9,6 +9,7 @@ import {
 } from 'firebase/firestore';
 import { useEffect, useRef, useState } from 'react';
 import {
+  ActivityIndicator,
   Keyboard,
   Platform,
   Text,
@@ -59,7 +60,10 @@ export default function LoginScreen() {
     if (querySnapshot.empty) {
       setPhoneNumber('');
       setLoading(false);
-      showSnackbar('Phone number is not registered');
+      showSnackbar({
+        message: 'Invalid phone number! Please try again.',
+        type: 'error',
+      });
       return;
     }
 
@@ -80,11 +84,11 @@ export default function LoginScreen() {
       const json = await res.json();
       console.log('[handleSendMessage] SMS sent:', json);
       setCooldown(30);
-      showSnackbar('OTP sent successfully');
+      showSnackbar({ message: 'OTP sent successfully', type: 'success' });
       setStep('otp');
     } catch (error) {
       console.error('Error sending OTP:', error);
-      showSnackbar('Failed to send OTP');
+      showSnackbar({ message: 'Failed to send OTP', type: 'error' });
     } finally {
       setLoading(false);
     }
@@ -106,11 +110,11 @@ export default function LoginScreen() {
           loginUser({ ...user, id: querySnapshot.docs[0].id });
           router.replace('/dashboard');
         } else {
-          showSnackbar('Invalid OTP. Try again.');
+          showSnackbar({ message: 'Invalid OTP. Try again.', type: 'error' });
         }
       } catch (error) {
         console.error('Verification failed:', error);
-        showSnackbar('Invalid OTP. Try again.');
+        showSnackbar({ message: 'Invalid OTP. Try again.', type: 'error' });
       } finally {
         setLoading(false);
       }
@@ -164,15 +168,18 @@ export default function LoginScreen() {
                 </Text>
                 <View className="mt-6">
                   <Input
+                    autoFocus
                     className="pl-11"
                     defaultValue="9175553474"
                     value={phoneNumber}
                     onChangeText={setPhoneNumber}
                     inputMode="numeric"
                     maxLength={10}
+                    onSubmitEditing={onPressSendOTP}
+                    returnKeyType="done"
                   />
                   <View className="absolute bottom-0 left-3 top-[13px]">
-                    <Text className="text-default-tertiary text-base">+63</Text>
+                    <Text className="text-base text-default-tertiary">+63</Text>
                   </View>
                 </View>
               </View>
@@ -181,7 +188,7 @@ export default function LoginScreen() {
                 <Text className="font-OnestSemiBold text-[36px] text-white">
                   Enter the{'\n'}verification code
                 </Text>
-                <Text className="text-default-secondary mt-2">
+                <Text className="mt-2 text-default-secondary">
                   We sent a code to +63 {phoneNumber}
                 </Text>
                 <View className="mt-8 flex-1 gap-4 px-4">
@@ -204,14 +211,14 @@ export default function LoginScreen() {
                     disabled={loading}
                   />
                   {loading ? (
-                    <Text className="text-default-secondary text-center font-OnestSemiBold">
+                    <Text className="text-center font-OnestSemiBold text-default-secondary">
                       Verifying...
                     </Text>
                   ) : (
                     <TouchableOpacity
                       onPress={onPressSendOTP}
                       disabled={cooldown > 0}>
-                      <Text className="text-default-secondary text-center font-OnestSemiBold">
+                      <Text className="text-center font-OnestSemiBold text-default-secondary">
                         {cooldown > 0
                           ? `Resend in ${cooldown}s`
                           : 'Resend code'}
@@ -229,9 +236,13 @@ export default function LoginScreen() {
             onPress={onPressSendOTP}
             variant="outline"
             className="mx-4 mb-10 h-14 bg-[#0C0E12]">
-            <Text className="text-default-secondary font-OnestSemiBold">
-              Next
-            </Text>
+            {loading ? (
+              <ActivityIndicator />
+            ) : (
+              <Text className="font-OnestSemiBold text-default-secondary">
+                Next
+              </Text>
+            )}
           </Button>
         )}
       </SafeAreaView>

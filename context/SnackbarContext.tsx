@@ -1,8 +1,12 @@
 import { createContext, useCallback, useContext, useState } from 'react';
-import Snackbar from '~/components/Snackbar';
+import Snackbar, { SnackbarType } from '~/components/Snackbar';
 
 type SnackbarContextType = {
-  showSnackbar: (message: string, duration?: number) => void;
+  showSnackbar: (params: {
+    message: string;
+    duration?: number;
+    type?: SnackbarType;
+  }) => void;
 };
 
 const SnackbarContext = createContext<SnackbarContextType>({
@@ -17,12 +21,25 @@ export function SnackbarProvider({ children }: { children: React.ReactNode }) {
   const [visible, setVisible] = useState(false);
   const [message, setMessage] = useState('');
   const [duration, setDuration] = useState(3000);
+  const [type, setType] = useState<SnackbarType>('success');
 
-  const showSnackbar = useCallback((msg: string, dur = 3000) => {
-    setMessage(msg);
-    setDuration(dur);
-    setVisible(true);
-  }, []);
+  const showSnackbar = useCallback(
+    ({
+      message,
+      duration = 3000,
+      type = 'success',
+    }: {
+      message: string;
+      duration?: number;
+      type?: SnackbarType;
+    }) => {
+      setType(type);
+      setMessage(message);
+      setDuration(duration);
+      setVisible(true);
+    },
+    [],
+  );
 
   const handleClose = () => {
     setVisible(false);
@@ -36,6 +53,7 @@ export function SnackbarProvider({ children }: { children: React.ReactNode }) {
         message={message}
         onClose={handleClose}
         duration={duration}
+        type={type}
       />
     </SnackbarContext.Provider>
   );

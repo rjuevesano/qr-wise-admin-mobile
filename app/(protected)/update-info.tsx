@@ -50,7 +50,7 @@ export default function UpdateInfoScreen() {
       getStore(id);
     }
 
-    showSnackbar('Changes successfully saved!');
+    showSnackbar({ message: 'Changes successfully saved!', type: 'success' });
     setLoading(false);
     router.back();
   };
@@ -87,11 +87,11 @@ export default function UpdateInfoScreen() {
               <View className="size-10" />
             </View>
             <View className="mt-5 gap-4 px-4">
-              <Text className="text-default-tertiary font-OnestSemiBold text-2xl">
+              <Text className="font-OnestSemiBold text-2xl text-default-tertiary">
                 Update {label}
               </Text>
               <View className="gap-1.5">
-                <Text className="text-default-secondary font-OnestMedium text-sm">
+                <Text className="font-OnestMedium text-sm text-default-secondary">
                   {label2 || label}
                 </Text>
                 {key === 'phone' ? (
@@ -105,7 +105,7 @@ export default function UpdateInfoScreen() {
                       maxLength={10}
                     />
                     <View className="absolute bottom-0 left-3 top-[13px]">
-                      <Text className="text-default-tertiary text-base">
+                      <Text className="text-base text-default-tertiary">
                         +63
                       </Text>
                     </View>

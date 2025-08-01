@@ -81,7 +81,12 @@ export default function AddEditDiscountScreen() {
     });
 
     getStore(store?.id);
-    showSnackbar('Discount added successfully!');
+    showSnackbar({
+      message: discountId
+        ? 'Discount updated successfully!'
+        : 'Discount added successfully!',
+      type: 'success',
+    });
     setLoading(false);
     router.back();
   };
@@ -98,7 +103,10 @@ export default function AddEditDiscountScreen() {
     });
 
     getStore(store?.id);
-    showSnackbar('Discount deleted successfully!');
+    showSnackbar({
+      message: 'Discount deleted successfully!',
+      type: 'success',
+    });
     setDeleteLoading(false);
     router.back();
   };
