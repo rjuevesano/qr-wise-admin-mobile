@@ -34,7 +34,7 @@ export function useSalesInsightGPT({
   transactionsLastWeek: Transaction[];
 }) {
   const [insight, setInsight] = useState<string>('');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (!transactionsToday?.length && !transactionsLastWeek?.length) return;

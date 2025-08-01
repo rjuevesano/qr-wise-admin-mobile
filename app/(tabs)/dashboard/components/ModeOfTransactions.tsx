@@ -1,28 +1,12 @@
+import { format } from 'date-fns';
+import { router } from 'expo-router';
 import { ChevronRightIcon } from 'lucide-react-native';
 import { useMemo } from 'react';
-import { Text, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { useTransactionsQuery } from '~/hooks/useTransactionsQuery';
 
 type SourceType = 'DINER' | 'KIOSK' | 'SERVICE';
-
-const sourceTotals: Record<SourceType, number> = {
-  DINER: 0,
-  KIOSK: 0,
-  SERVICE: 0,
-};
-
-const sourceCounts: Record<SourceType, number> = {
-  DINER: 0,
-  KIOSK: 0,
-  SERVICE: 0,
-};
-
-const sourceLabels: Record<SourceType, string> = {
-  DINER: 'Table QR',
-  KIOSK: 'Self-Ordering',
-  SERVICE: 'Counter',
-};
 
 export default function ModeOfTransactions({ date }: { date: Date }) {
   const dateToday = useMemo(() => new Date(date), [date]);
@@ -33,6 +17,24 @@ export default function ModeOfTransactions({ date }: { date: Date }) {
     },
     'total-sales',
   );
+
+  const sourceTotals: Record<SourceType, number> = {
+    DINER: 0,
+    KIOSK: 0,
+    SERVICE: 0,
+  };
+
+  const sourceCounts: Record<SourceType, number> = {
+    DINER: 0,
+    KIOSK: 0,
+    SERVICE: 0,
+  };
+
+  const sourceLabels: Record<SourceType, string> = {
+    DINER: 'Table QR',
+    KIOSK: 'Self-Ordering',
+    SERVICE: 'Counter',
+  };
 
   const updatedTransactions = transactions || [];
   updatedTransactions.forEach((tx) => {
@@ -53,12 +55,17 @@ export default function ModeOfTransactions({ date }: { date: Date }) {
     totalAmount > 0 ? ((value / totalAmount) * 100).toFixed(2) : '0.00';
 
   return (
-    <View className="h-[136px] rounded-xl border border-[#22262F] bg-[#13161B] p-3">
+    <TouchableOpacity
+      onPress={() =>
+        router.push(`/mode-of-transactions?date=${format(date, 'yyyy-MM-dd')}`)
+      }
+      className="h-[136px] rounded-xl border border-[#22262F] bg-[#13161B] p-3">
       <Text className="text-default-secondary font-OnestMedium text-xs">
         Mode of Transaction
       </Text>
       <Text className="text-default-primary mt-2 font-OnestSemiBold text-2xl">
-        {getPercentage(sourceTotals[topSource])}% {sourceLabels[topSource]}
+        {getPercentage(sourceTotals[topSource])}%{' '}
+        {(transactions || []).length > 0 ? sourceLabels[topSource] : ''}
       </Text>
       <Text className="text-default-secondary font-OnestRegular text-xs">
         {countToday} transactions
@@ -86,6 +93,6 @@ export default function ModeOfTransactions({ date }: { date: Date }) {
           />
         </Svg>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }

@@ -7,15 +7,16 @@ import {
   subDays,
 } from 'date-fns';
 import { useMemo } from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import { BarChart } from 'react-native-gifted-charts';
 import useCurrentHour from '~/hooks/useCurrentHour';
 import { useTransactionsQuery } from '~/hooks/useTransactionsQuery';
-import { formatNumber } from '~/lib/utils';
 import { Transaction } from '~/types';
 
-function getSalesByDate(transactions: Transaction[]) {
-  const salesMap: Record<string, number> = {};
+type SourceType = 'DINER' | 'KIOSK' | 'SERVICE';
+
+function getSourceByDate(transactions: Transaction[]) {
+  const sourceMap: Record<string, Record<SourceType, number>> = {};
 
   transactions.forEach((transaction) => {
     const createdAt = transaction.createdAt?.toDate?.();
@@ -23,14 +24,24 @@ function getSalesByDate(transactions: Transaction[]) {
 
     const dateKey = format(createdAt, 'dd MMM yyyy'); // e.g. "10 Mar 2025"
 
-    if (!salesMap[dateKey]) {
-      salesMap[dateKey] = 0;
+    if (!sourceMap[dateKey]) {
+      sourceMap[dateKey] = {
+        DINER: 0,
+        KIOSK: 0,
+        SERVICE: 0,
+      };
     }
 
-    salesMap[dateKey] += transaction.amount;
+    if (transaction.source === 'DINER') {
+      sourceMap[dateKey].DINER += 1;
+    } else if (transaction.source === 'KIOSK') {
+      sourceMap[dateKey].KIOSK += 1;
+    } else if (transaction.source === 'SERVICE') {
+      sourceMap[dateKey].SERVICE += 1;
+    }
   });
 
-  return salesMap;
+  return sourceMap;
 }
 
 export default function BarGraphChart({ dateToday }: { dateToday: Date }) {
@@ -79,8 +90,7 @@ export default function BarGraphChart({ dateToday }: { dateToday: Date }) {
     );
   });
 
-  // Map sales per date
-  const salesMapThisWeek = getSalesByDate(transactionsSecondWeek);
+  const sourceMapThisWeek = getSourceByDate(transactionsSecondWeek);
 
   // Build 7-day aligned chart using second week's dates
   const secondWeekDays = eachDayOfInterval({
@@ -90,27 +100,21 @@ export default function BarGraphChart({ dateToday }: { dateToday: Date }) {
 
   const chartData = secondWeekDays.map((day) => {
     const thisWeekKey = format(day, 'dd MMM yyyy');
-    const value = salesMapThisWeek[thisWeekKey] || 0;
 
     return {
-      value,
       label: format(day, 'EEE'),
-      frontColor: isToday(day) ? '#FFFFFF' : '#3B3F48',
-      ...(isToday(day) && {
-        labelTextStyle: { color: '#F7F7F7' },
-      }),
-      ...(value > 0 && {
-        topLabelComponent: () =>
-          isToday(day) ? (
-            <Text className="text-default-secondary mb-1 text-xs">
-              ₱{formatNumber(value)}
-            </Text>
-          ) : (
-            <Text className="text-default-secondary -mb-5 text-xs">
-              ₱{formatNumber(value)}
-            </Text>
-          ),
-      }),
+      stacks: Object.entries(sourceMapThisWeek[thisWeekKey] || {}).map(
+        ([source, amount], index) => ({
+          marginBottom: index === 0 ? 0 : 1,
+          value: amount,
+          color:
+            source === 'DINER'
+              ? '#78B300'
+              : source === 'KIOSK'
+                ? '#C2F93A'
+                : '#9CDF03',
+        }),
+      ),
     };
   });
 
@@ -120,7 +124,7 @@ export default function BarGraphChart({ dateToday }: { dateToday: Date }) {
         <View className="h-[122px] w-full animate-pulse overflow-hidden border border-[#22262F] bg-[#13161B]"></View>
       ) : (
         <BarChart
-          data={chartData}
+          stackData={chartData}
           height={122}
           barWidth={40}
           spacing={16}
