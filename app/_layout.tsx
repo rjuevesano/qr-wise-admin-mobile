@@ -16,6 +16,8 @@ import { SnackbarProvider } from '~/context/SnackbarContext';
 import { useColorScheme } from '~/hooks/useColorScheme';
 import '../global.css';
 
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
@@ -46,6 +48,8 @@ function Root() {
 }
 
 export default function RootLayout() {
+  const queryClient = new QueryClient();
+
   const [loaded, error] = useFonts({
     OnestLight: require('../assets/fonts/Onest-Light.ttf'),
     OnestThin: require('../assets/fonts/Onest-Thin.ttf'),
@@ -68,12 +72,14 @@ export default function RootLayout() {
   }
 
   return (
-    <AuthProvider>
-      <SnackbarProvider>
-        <GestureHandlerRootView>
-          <Root />
-        </GestureHandlerRootView>
-      </SnackbarProvider>
-    </AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <SnackbarProvider>
+          <GestureHandlerRootView>
+            <Root />
+          </GestureHandlerRootView>
+        </SnackbarProvider>
+      </AuthProvider>
+    </QueryClientProvider>
   );
 }
