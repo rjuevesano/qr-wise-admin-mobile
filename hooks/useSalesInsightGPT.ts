@@ -15,7 +15,7 @@ function summarizeHourly(transactions: Transaction[]): HourlySummary {
   const summary: HourlySummary = {};
 
   for (const t of transactions) {
-    const hour = format(new Date(t.createdAt.toDate()), 'h a');
+    const hour = format(new Date(t.createdAt.toDate()), 'HH');
     if (!summary[hour]) {
       summary[hour] = { revenue: 0, orders: 0 };
     }
@@ -67,10 +67,14 @@ export function useSalesInsightGPT({
 
     const hourlyComparison = hours
       .map((hour) => {
+        const h = parseInt(hour);
+        const period = h >= 12 ? 'PM' : 'AM';
+        const hour12 = h % 12 === 0 ? 12 : h % 12;
+
         const today = todayHourly[hour] || { revenue: 0, orders: 0 };
         const lastWeek = lastWeekHourly[hour] || { revenue: 0, orders: 0 };
 
-        return `🕒 ${hour}
+        return `🕒 ${hour12} ${period}
   - Today: ${formatPrice(today.revenue)} from ${today.orders} orders with an average order value of ${formatPrice(
     today.revenue / today.orders,
   )}
