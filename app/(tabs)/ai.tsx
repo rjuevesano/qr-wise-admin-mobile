@@ -24,7 +24,7 @@ export default function AIScreen() {
       <SafeAreaView className="flex-1">
         <View className="flex-row items-center justify-between px-4 py-1">
           <View className="size-10" />
-          <Text className="text-default-primary font-OnestSemiBold text-base">
+          <Text className="font-OnestSemiBold text-base text-default-primary">
             Wise AI
           </Text>
           <View className="size-10" />
@@ -39,10 +39,10 @@ export default function AIScreen() {
             className="absolute"
           />
         </View>
-        <View className="absolute bottom-[100px] left-0 right-0 p-5">
+        <View className="ios:bottom-[100px] android:bottom-20 absolute left-0 right-0 p-5">
           <View className="rounded-xl bg-[#13161B] px-4 py-[14px]">
             <View className="flex-row items-center justify-between">
-              <Text className="text-default-primary font-OnestSemiBold text-sm">
+              <Text className="font-OnestSemiBold text-sm text-default-primary">
                 Suggested questions
               </Text>
               <TouchableOpacity>
@@ -86,7 +86,7 @@ export default function AIScreen() {
                   </ClipPath>
                 </Defs>
               </Svg>
-              <Text className="text-default-primary font-OnestMedium">
+              <Text className="font-OnestMedium text-default-primary">
                 Ask anything
               </Text>
             </View>
@@ -126,6 +126,7 @@ export default function AIScreen() {
                 autoFocus
                 className="mt-5 border-b border-[#22262F] pb-3 font-OnestSemiBold text-xl text-white"
                 placeholder="Ask anything..."
+                placeholderTextColor="#94979C"
                 onSubmitEditing={() => {}}
                 returnKeyType="done"
               />
