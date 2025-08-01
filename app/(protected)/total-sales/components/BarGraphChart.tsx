@@ -102,7 +102,7 @@ export default function BarGraphChart({ dateToday }: { dateToday: Date }) {
       ...(value > 0 && {
         topLabelComponent: () =>
           isToday(day) ? (
-            <Text className="text-default-secondary mb-0 text-xs">
+            <Text className="text-default-secondary mb-1 text-xs">
               ₱{formatNumber(value)}
             </Text>
           ) : (

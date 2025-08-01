@@ -27,6 +27,7 @@ import DailyWeatherForecast, {
 } from '~/components/WeatherForecast';
 import { useAuth } from '~/context/AuthUserContext';
 import { getTimeOfDay } from '~/lib/utils';
+import TotalSales from './components/TotalSales';
 
 export default function DashboardScreen() {
   const { user, toggleSheet } = useAuth();
@@ -140,35 +141,7 @@ export default function DashboardScreen() {
               <DailyWeatherForecast dailyData={[weatherData.daily?.[0]]} />
             )}
           </View>
-          {/* total sales */}
-          <TouchableOpacity
-            onPress={() =>
-              router.push(`/total-sales?date=${format(date, 'yyyy-MM-dd')}`)
-            }
-            className="h-[136px] rounded-xl border border-[#22262F] bg-[#13161B] p-3">
-            <View className="absolute left-3 top-3 z-10">
-              <Text className="text-default-secondary font-OnestMedium text-xs">
-                Total Sales
-              </Text>
-              <Text className="text-default-primary mt-2 font-OnestSemiBold text-2xl">
-                ₱34,291.20
-              </Text>
-              <View className="flex-row items-center gap-1">
-                <Text className="font-OnestRegular text-xs text-[#F97066]">
-                  -40.14%
-                </Text>
-                <Text className="text-default-secondary font-OnestRegular text-xs">
-                  vs Jul 8
-                </Text>
-              </View>
-            </View>
-            <View className="absolute right-3 top-3">
-              <ChevronRightIcon color="#FFFFFF" />
-            </View>
-            <View className="mt-3 overflow-hidden">
-              <Chart />
-            </View>
-          </TouchableOpacity>
+          <TotalSales date={date} />
           {/* total transactions + customers */}
           <View className="flex-row justify-between">
             <View className="w-[48%] gap-2 rounded-xl border border-[#22262F] bg-[#13161B] p-3">

@@ -25,9 +25,7 @@ export default function Overview({
       }
       return true;
     })
-    .map((transaction) => {
-      return transaction.amount;
-    })
+    .map((transaction) => transaction.amount)
     .reduce((acc, i) => acc + i, 0);
 
   const totalSalesTodayWithVatInc = transactionsToday
@@ -38,9 +36,7 @@ export default function Overview({
       }
       return true;
     })
-    .map((transaction) => {
-      return transaction.amount;
-    })
+    .map((transaction) => transaction.amount)
     .reduce((acc, i) => acc + i, 0);
 
   const totalSalesPercentage =

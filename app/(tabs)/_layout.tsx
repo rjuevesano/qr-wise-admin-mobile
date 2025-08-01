@@ -224,13 +224,13 @@ export default function TabLayout() {
   return (
     <View className="flex-1 bg-[#0C0E12]">
       <Tabs
-        initialRouteName="dashboard"
+        initialRouteName="dashboard/index"
         screenOptions={{
           headerShown: false,
           tabBarStyle: { display: 'none' },
           animation: 'fade',
         }}>
-        <Tabs.Screen name="dashboard" options={{ href: '/dashboard' }} />
+        <Tabs.Screen name="dashboard/index" options={{ href: '/dashboard' }} />
         <Tabs.Screen name="ai" options={{ href: '/ai' }} />
         <Tabs.Screen name="menu" options={{ href: '/menu' }} />
         <Tabs.Screen name="settings/index" options={{ href: '/settings' }} />

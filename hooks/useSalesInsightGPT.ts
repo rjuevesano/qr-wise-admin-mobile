@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import { OpenAI } from 'openai';
 import { useEffect, useState } from 'react';
 import { formatPrice } from '~/lib/utils';
@@ -8,60 +9,71 @@ const openai = new OpenAI({
   dangerouslyAllowBrowser: true,
 });
 
-function summarizeTransactions(transactions: Transaction[]) {
-  const totalRevenue = transactions.reduce((sum, t) => sum + t.amount, 0);
-  const totalOrders = transactions.length;
-  const avgOrderValue = totalRevenue / (totalOrders || 1);
+type HourlySummary = Record<string, { revenue: number; orders: number }>;
 
-  return {
-    totalRevenue,
-    totalOrders,
-    avgOrderValue,
-  };
-}
+function summarizeHourly(transactions: Transaction[]): HourlySummary {
+  const summary: HourlySummary = {};
 
-function getTimeOfDayGreeting(hour: number): string {
-  if (hour < 11) return 'It is currently the morning.';
-  if (hour < 15) return 'It is currently the early afternoon.';
-  if (hour < 18) return 'It is currently the late afternoon.';
-  return 'It is currently the evening.';
+  for (const t of transactions) {
+    const hour = format(new Date(t.createdAt.toDate()), 'h a');
+    if (!summary[hour]) {
+      summary[hour] = { revenue: 0, orders: 0 };
+    }
+    summary[hour].revenue += t.amount;
+    summary[hour].orders += 1;
+  }
+
+  return summary;
 }
 
 export function useSalesInsightGPT({
-  currentHour,
   transactionsToday,
   transactionsLastWeek,
 }: {
-  currentHour: number;
   transactionsToday: Transaction[];
   transactionsLastWeek: Transaction[];
 }) {
   const [insight, setInsight] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!transactionsToday?.length && !transactionsLastWeek?.length) return;
 
-    const todaySummary = summarizeTransactions(transactionsToday || []);
-    const lastWeekSummary = summarizeTransactions(transactionsLastWeek || []);
+    const todayHourly = summarizeHourly(transactionsToday || []);
+    const lastWeekHourly = summarizeHourly(transactionsLastWeek || []);
 
-    const timeContext = getTimeOfDayGreeting(currentHour);
+    const hours = Array.from(
+      new Set([...Object.keys(todayHourly), ...Object.keys(lastWeekHourly)]),
+    ).sort();
+
+    const hourlyComparison = hours
+      .map((hour) => {
+        const today = todayHourly[hour] || { revenue: 0, orders: 0 };
+        const lastWeek = lastWeekHourly[hour] || { revenue: 0, orders: 0 };
+
+        return `🕒 ${hour}
+  - Today: ${formatPrice(today.revenue)} from ${today.orders} orders with an average order value of ${formatPrice(
+    today.revenue / today.orders,
+  )}
+  - Last Week: ${formatPrice(lastWeek.revenue)} from ${lastWeek.orders} orders with an average order value of ${formatPrice(
+    lastWeek.revenue / lastWeek.orders,
+  )}`;
+      })
+      .join('\n\n');
 
     const prompt = `
-${timeContext}
-Compare today's and last week's sales performance up to this time of day.
+Compare the sales performance hour-by-hour between today and the same day last week.
 
-Today's Summary:
-- Total Revenue: ${formatPrice(todaySummary.totalRevenue)}
-- Total Orders: ${todaySummary.totalOrders}
-- Average Order Value: ${formatPrice(todaySummary.avgOrderValue)} 
+Use emojis to indicate performance:
+- 🔥 or 📈 if today is better than last week
+- 😢 or 📉 if today is worse
+- ➖ if they are about the same
 
-Same Day Last Week:
-- Total Revenue: ${formatPrice(lastWeekSummary.totalRevenue)}
-- Total Orders: ${lastWeekSummary.totalOrders}
-- Average Order Value: ${formatPrice(lastWeekSummary.avgOrderValue)}
+Here's the breakdown:
 
-Provide a short, insightful analysis. Highlight any significant differences or trends.`.trim();
+${hourlyComparison}
+
+Now provide a short summary of trends you observe, and highlight key improvements or declines using emojis.`.trim();
 
     (async () => {
       setLoading(true);
@@ -71,7 +83,7 @@ Provide a short, insightful analysis. Highlight any significant differences or t
           messages: [
             {
               role: 'system',
-              content: 'You are a helpful sales analyst.',
+              content: 'You are a helpful and concise sales analyst.',
             },
             {
               role: 'user',
@@ -88,7 +100,7 @@ Provide a short, insightful analysis. Highlight any significant differences or t
         setLoading(false);
       }
     })();
-  }, [transactionsToday, transactionsLastWeek, currentHour]);
+  }, [transactionsToday, transactionsLastWeek]);
 
   return { insight, loading };
 }

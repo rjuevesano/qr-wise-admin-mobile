@@ -39,21 +39,16 @@ export default function Insight({
   }, [transactionsWeekOfToday, currentHour]);
 
   const { insight, loading } = useSalesInsightGPT({
-    currentHour,
     transactionsToday: todayTransactions,
     transactionsLastWeek: lastWeekTransactions,
   });
 
   const totalSalesLastWeekOfTodayWithVatInc = lastWeekTransactions
-    .map((transaction) => {
-      return transaction.amount;
-    })
+    .map((transaction) => transaction.amount)
     .reduce((acc, i) => acc + i, 0);
 
   const totalSalesTodayWithVatInc = todayTransactions
-    .map((transaction) => {
-      return transaction.amount;
-    })
+    .map((transaction) => transaction.amount)
     .reduce((acc, i) => acc + i, 0);
 
   return (
