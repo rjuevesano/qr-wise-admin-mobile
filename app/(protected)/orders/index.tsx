@@ -1,7 +1,15 @@
 import { subDays } from 'date-fns';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useMemo } from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Keyboard,
+  Platform,
+  Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Path } from 'react-native-svg';
 import { useTransactionsQuery } from '~/hooks/useTransactionsQuery';
@@ -55,34 +63,39 @@ export default function OrdersScreen() {
           <Text />
           <View className="size-10" />
         </View>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            paddingTop: 24,
-            paddingBottom: 120,
-            paddingHorizontal: 16,
-            gap: 16,
-          }}>
-          <Overview
-            dateToday={dateToday}
-            lastWeekOfToday={lastWeekOfToday}
-            transactionsWeekOfToday={transactionsWeekOfToday || []}
-            transactionsToday={transactionsToday || []}
-          />
-          <BarGraphChart dateToday={dateToday} />
-          <LineGraphChart
-            dateToday={dateToday}
-            lastWeekOfToday={lastWeekOfToday}
-            transactionsWeekOfToday={transactionsWeekOfToday || []}
-            transactionsToday={transactionsToday || []}
-          />
-          <Insight
-            dateToday={dateToday}
-            lastWeekOfToday={lastWeekOfToday}
-            transactionsWeekOfToday={transactionsWeekOfToday || []}
-            transactionsToday={transactionsToday || []}
-          />
-        </ScrollView>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <KeyboardAwareScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{
+              paddingTop: 24,
+              paddingBottom: 120,
+              paddingHorizontal: 16,
+              gap: 16,
+            }}
+            enableOnAndroid
+            extraScrollHeight={Platform.OS === 'ios' ? 80 : 100}
+            keyboardShouldPersistTaps="handled">
+            <Overview
+              dateToday={dateToday}
+              lastWeekOfToday={lastWeekOfToday}
+              transactionsWeekOfToday={transactionsWeekOfToday || []}
+              transactionsToday={transactionsToday || []}
+            />
+            <BarGraphChart dateToday={dateToday} />
+            <LineGraphChart
+              dateToday={dateToday}
+              lastWeekOfToday={lastWeekOfToday}
+              transactionsWeekOfToday={transactionsWeekOfToday || []}
+              transactionsToday={transactionsToday || []}
+            />
+            <Insight
+              dateToday={dateToday}
+              lastWeekOfToday={lastWeekOfToday}
+              transactionsWeekOfToday={transactionsWeekOfToday || []}
+              transactionsToday={transactionsToday || []}
+            />
+          </KeyboardAwareScrollView>
+        </TouchableWithoutFeedback>
       </SafeAreaView>
     </View>
   );

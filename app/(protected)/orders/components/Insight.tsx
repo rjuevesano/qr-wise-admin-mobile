@@ -7,6 +7,7 @@ import WiseAi from '~/components/icons/WiseAi';
 import useCurrentHour from '~/hooks/useCurrentHour';
 import { useOrdersInsightGPT } from '~/hooks/useOrdersInsightGPT';
 import { Transaction } from '~/types';
+import Notes from './Notes';
 
 export default function Insight({
   dateToday,
@@ -114,6 +115,7 @@ export default function Insight({
           </View>
         </View>
       </View>
+      <Notes dateToday={dateToday} />
       <View className="gap-2 rounded-xl border border-[#22262F] bg-[#13161B] p-3">
         <View className="flex-row items-center gap-2">
           <WiseAi />
