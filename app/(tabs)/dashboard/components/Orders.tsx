@@ -6,6 +6,7 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import Chart from '~/components/icons/Chart';
 import useCurrentHour from '~/hooks/useCurrentHour';
 import { useTransactionsQuery } from '~/hooks/useTransactionsQuery';
+import { makePluralize } from '~/lib/utils';
 
 export default function Orders({
   date,
@@ -49,13 +50,13 @@ export default function Orders({
       onPress={() => router.push(`/orders?date=${format(date, 'yyyy-MM-dd')}`)}
       className="h-[136px] rounded-xl border border-[#22262F] bg-[#13161B] p-3">
       <View className="absolute left-3 top-3 z-10">
-        <Text className="text-default-secondary font-OnestMedium text-xs">
+        <Text className="font-OnestMedium text-xs text-default-secondary">
           Orders
         </Text>
-        <Text className="text-default-primary mt-2 font-OnestSemiBold text-2xl">
-          {averageTotalOrders} orders
+        <Text className="mt-2 font-OnestSemiBold text-2xl text-default-primary">
+          {averageTotalOrders} {makePluralize('orders', averageTotalOrders)}
         </Text>
-        <Text className="text-default-secondary font-OnestRegular text-xs">
+        <Text className="font-OnestRegular text-xs text-default-secondary">
           average last hour
         </Text>
       </View>

@@ -72,22 +72,30 @@ export default function PieGraphChart({
           <View className="flex-row gap-2">
             <View className="mt-1 size-2 rounded-full bg-[#78B300]" />
             <View className="flex-row items-center gap-2">
-              <Text className="text-default-tertiary font-OnestRegular text-sm">
+              <Text className="font-OnestRegular text-sm text-default-tertiary">
                 Table QR
               </Text>
-              <Text className="text-default-tertiary font-OnestRegular text-sm">
-                • {getPercentage(sourceTotals.DINER).toFixed(2)}%
+              <Text className="font-OnestRegular text-sm text-default-tertiary">
+                •{' '}
+                {getPercentage(sourceTotals.DINER)
+                  .toFixed(2)
+                  .replace('.00', '')}
+                %
               </Text>
             </View>
           </View>
           <View className="flex-row gap-2">
             <View className="mt-1 size-2 rounded-full bg-[#9CDF03]" />
             <View className="flex-row items-center gap-2">
-              <Text className="text-default-tertiary font-OnestRegular text-sm">
+              <Text className="font-OnestRegular text-sm text-default-tertiary">
                 Counter
               </Text>
-              <Text className="text-default-tertiary font-OnestRegular text-sm">
-                • {getPercentage(sourceTotals.SERVICE).toFixed(2)}%
+              <Text className="font-OnestRegular text-sm text-default-tertiary">
+                •{' '}
+                {getPercentage(sourceTotals.SERVICE)
+                  .toFixed(2)
+                  .replace('.00', '')}
+                %
               </Text>
             </View>
           </View>
@@ -95,11 +103,12 @@ export default function PieGraphChart({
         <View className="flex-row items-center justify-center gap-2">
           <View className="mt-1 size-2 rounded-full bg-[#C2F93A]" />
           <View className="flex-row items-center gap-2">
-            <Text className="text-default-tertiary font-OnestRegular text-sm">
+            <Text className="font-OnestRegular text-sm text-default-tertiary">
               Self-Ordering
             </Text>
-            <Text className="text-default-tertiary font-OnestRegular text-sm">
-              • {getPercentage(sourceTotals.KIOSK).toFixed(2)}%
+            <Text className="font-OnestRegular text-sm text-default-tertiary">
+              •{' '}
+              {getPercentage(sourceTotals.KIOSK).toFixed(2).replace('.00', '')}%
             </Text>
           </View>
         </View>

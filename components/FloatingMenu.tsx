@@ -3,6 +3,7 @@ import { router } from 'expo-router';
 import React, { useRef, useState } from 'react';
 import {
   Animated,
+  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -44,7 +45,7 @@ const actions = [
     key: 'search',
   },
   {
-    label: 'Add Notes',
+    label: 'Add Log book Entry',
     icon: (
       <Svg width="48" height="48" viewBox="0 0 48 48" fill="none">
         <Circle cx="24" cy="24" r="24" fill="white" />
@@ -61,10 +62,10 @@ const actions = [
         />
       </Svg>
     ),
-    key: 'notes',
+    key: 'logbook',
   },
   {
-    label: 'Add/Edit Upsell Banner',
+    label: 'Add Upsell Banner',
     icon: (
       <Svg width="48" height="48" viewBox="0 0 48 48" fill="none">
         <Circle cx="24" cy="24" r="24" fill="white" />
@@ -108,7 +109,7 @@ const actions = [
     key: 'toggle',
   },
   {
-    label: 'Add/Edit Menu',
+    label: 'Add Menu',
     icon: (
       <Svg width="48" height="48" viewBox="0 0 48 48" fill="none">
         <Circle cx="24" cy="24" r="24" fill="white" />
@@ -142,14 +143,14 @@ export default function FloatingMenu() {
     console.log(`${key} selected`);
     if (key === 'search') {
       router.push('/ai');
-    } else if (key === 'notes') {
+    } else if (key === 'logbook') {
       //
     } else if (key === 'banner') {
       //
     } else if (key === 'toggle') {
-      //
-    } else if (key === 'menu') {
       router.push('/menu');
+    } else if (key === 'menu') {
+      //
     }
     toggleMenu(); // Auto-close
   };
@@ -217,12 +218,12 @@ export default function FloatingMenu() {
 const styles = StyleSheet.create({
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 0, 0, 0.4)', // Dark transparent background
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Dark transparent background
     zIndex: 0,
   },
   container: {
     position: 'absolute',
-    bottom: 110,
+    bottom: Platform.OS === 'ios' ? 110 : 80,
     right: 20,
     alignItems: 'flex-end',
   },

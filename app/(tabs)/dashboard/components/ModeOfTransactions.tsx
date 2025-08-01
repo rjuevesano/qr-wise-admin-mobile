@@ -5,6 +5,7 @@ import { useEffect, useMemo } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { useTransactionsQuery } from '~/hooks/useTransactionsQuery';
+import { makePluralize } from '~/lib/utils';
 
 type SourceType = 'DINER' | 'KIOSK' | 'SERVICE';
 
@@ -66,7 +67,10 @@ export default function ModeOfTransactions({
   )[0] as SourceType;
 
   const getPercentage = (value: number) =>
-    totalAmount > 0 ? ((value / totalAmount) * 100).toFixed(2) : '0.00';
+    (totalAmount > 0
+      ? ((value / totalAmount) * 100).toFixed(2)
+      : '0.00'
+    ).replace('.00', '');
 
   return (
     <TouchableOpacity
@@ -74,15 +78,15 @@ export default function ModeOfTransactions({
         router.push(`/mode-of-transactions?date=${format(date, 'yyyy-MM-dd')}`)
       }
       className="h-[136px] rounded-xl border border-[#22262F] bg-[#13161B] p-3">
-      <Text className="text-default-secondary font-OnestMedium text-xs">
+      <Text className="font-OnestMedium text-xs text-default-secondary">
         Mode of Transaction
       </Text>
-      <Text className="text-default-primary mt-2 font-OnestSemiBold text-2xl">
+      <Text className="mt-2 font-OnestSemiBold text-2xl text-default-primary">
         {getPercentage(sourceTotals[topSource])}%{' '}
         {(transactions || []).length > 0 ? sourceLabels[topSource] : ''}
       </Text>
-      <Text className="text-default-secondary font-OnestRegular text-xs">
-        {countToday} transactions
+      <Text className="font-OnestRegular text-xs text-default-secondary">
+        {countToday} {makePluralize('transactions', countToday)}
       </Text>
       <View className="absolute right-3 top-3">
         <ChevronRightIcon color="#FFFFFF" />

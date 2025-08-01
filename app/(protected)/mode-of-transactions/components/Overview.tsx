@@ -1,4 +1,5 @@
 import { Text, View } from 'react-native';
+import { makePluralize } from '~/lib/utils';
 import { Transaction } from '~/types';
 
 type SourceType = 'DINER' | 'KIOSK' | 'SERVICE';
@@ -42,20 +43,23 @@ export default function Overview({
   )[0] as SourceType;
 
   const getPercentage = (value: number) =>
-    totalAmount > 0 ? ((value / totalAmount) * 100).toFixed(2) : '0.00';
+    (totalAmount > 0
+      ? ((value / totalAmount) * 100).toFixed(2)
+      : '0.00'
+    ).replace('.00', '');
 
   return (
     <View className="gap-1">
-      <Text className="text-default-tertiary font-OnestSemiBold text-2xl">
+      <Text className="font-OnestSemiBold text-2xl text-default-tertiary">
         Mode of Transaction
       </Text>
       <View className="flex-row items-center gap-2">
-        <Text className="text-default-primary font-OnestSemiBold text-2xl">
+        <Text className="font-OnestSemiBold text-2xl text-default-primary">
           {getPercentage(sourceTotals[topSource])}%{' '}
           {(transactions || []).length > 0 ? sourceLabels[topSource] : ''}
         </Text>
-        <Text className="text-default-secondary font-OnestRegular text-sm">
-          {countToday} transactions
+        <Text className="font-OnestRegular text-sm text-default-secondary">
+          {countToday} {makePluralize('transactions', countToday)}
         </Text>
       </View>
     </View>

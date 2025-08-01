@@ -6,6 +6,7 @@ import TypeWriter from 'react-native-typewriter-effect';
 import WiseAi from '~/components/icons/WiseAi';
 import useCurrentHour from '~/hooks/useCurrentHour';
 import { useOrdersInsightGPT } from '~/hooks/useOrdersInsightGPT';
+import { makePluralize } from '~/lib/utils';
 import { Transaction } from '~/types';
 import Notes from './Notes';
 
@@ -70,17 +71,17 @@ export default function Insight({
                 strokeWidth="2"
               />
             </Svg>
-            <Text className="text-default-secondary font-OnestMedium">
+            <Text className="font-OnestMedium text-default-secondary">
               {format(dateToday, 'MMM d, EEEE')}
             </Text>
           </View>
           <View className="gap-1">
             <View className="flex-row items-center gap-1">
-              <Text className="text-default-primary font-OnestSemiBold text-2xl">
-                {totalOrdersToday} Orders
+              <Text className="font-OnestSemiBold text-2xl text-default-primary">
+                {totalOrdersToday} {makePluralize('Orders', totalOrdersToday)}
               </Text>
             </View>
-            <Text className="text-default-secondary font-OnestMedium text-xs">
+            <Text className="font-OnestMedium text-xs text-default-secondary">
               {hour12}
               {period}
             </Text>
@@ -100,17 +101,18 @@ export default function Insight({
                 strokeWidth="2"
               />
             </Svg>
-            <Text className="text-default-secondary font-OnestMedium">
+            <Text className="font-OnestMedium text-default-secondary">
               {format(lastWeekOfToday, 'MMM d, EEEE')}
             </Text>
           </View>
           <View className="gap-1">
             <View className="flex-row items-center gap-1">
-              <Text className="text-default-primary font-OnestSemiBold text-2xl">
-                {totalOrdersLastWeek} Orders
+              <Text className="font-OnestSemiBold text-2xl text-default-primary">
+                {totalOrdersLastWeek}{' '}
+                {makePluralize('Orders', totalOrdersLastWeek)}
               </Text>
             </View>
-            <Text className="text-default-secondary font-OnestMedium text-xs">
+            <Text className="font-OnestMedium text-xs text-default-secondary">
               {hour12}
               {period}
             </Text>
@@ -121,12 +123,12 @@ export default function Insight({
       <View className="gap-2 rounded-xl border border-[#22262F] bg-[#13161B] p-3">
         <View className="flex-row items-center gap-2">
           <WiseAi />
-          <Text className="text-default-primary font-OnestSemiBold text-sm">
+          <Text className="font-OnestSemiBold text-sm text-default-primary">
             Wise AI Insights
           </Text>
         </View>
         {loading ? (
-          <Text className="text-default-tertiary font-OnestRegular">
+          <Text className="font-OnestRegular text-default-tertiary">
             Loading insights...
           </Text>
         ) : (

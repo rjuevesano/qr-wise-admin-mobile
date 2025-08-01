@@ -1,8 +1,11 @@
 import { clsx, type ClassValue } from 'clsx';
+import pluralize from 'pluralize';
 import { twMerge } from 'tailwind-merge';
+import { MenuItemMovementWithComparison } from '~/hooks/useProductMovementInsightGPT';
 import {
   DiningOption,
   Discount,
+  MenuItem,
   Order,
   Store,
   TempOrder,
@@ -36,6 +39,10 @@ export const toTitleCase = (str: string) => {
     (txt) => txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase(),
   );
 };
+
+export function makePluralize(word: string, count: number) {
+  return pluralize(word, count);
+}
 
 export const fetchImageFromUri = async (uri: string) => {
   const response = await fetch(uri);
@@ -349,4 +356,59 @@ export function calculateTransactionsTotals(
       grabFood: 0,
     },
   };
+}
+
+export function computeMenuItemMovementFull(
+  transactions: Transaction[],
+  menuItems: MenuItem[],
+): MenuItemMovementWithComparison[] {
+  const unitSoldMap = new Map<string, number>();
+  const totalSalesMap = new Map<string, number>();
+  let totalSalesAll = 0;
+
+  // Precompute a map of menu item prices for quick lookup
+  const priceMap = new Map<string, number>();
+  menuItems.forEach((menu) => {
+    if (menu.id) priceMap.set(menu.id, Number(menu.price) || 0);
+  });
+
+  transactions.forEach((transaction) => {
+    if (!transaction.orders || transaction.orders.length === 0) return;
+
+    transaction.orders.forEach((order) => {
+      if (!order.menuId || !order.qty) return;
+      const id = order.menuId;
+      const qty = order.qty;
+      const price = priceMap.get(id) || 0;
+      const subtotal = price * qty;
+
+      // 👉 This gives total units sold per menu item.
+      const prevQty = unitSoldMap.get(id) || 0;
+      unitSoldMap.set(id, prevQty + qty);
+
+      // 👉 This gives total revenue per menu item.
+      const prevTotal = totalSalesMap.get(id) || 0;
+      totalSalesMap.set(id, prevTotal + subtotal);
+
+      totalSalesAll += subtotal;
+    });
+  });
+
+  return menuItems.map((menuItem) => {
+    const id = menuItem.id || '';
+    const unitSold = unitSoldMap.get(id) || 0;
+    const totalSales = totalSalesMap.get(id) || 0;
+
+    // 👉 This gives each item's contribution to overall sales, in percentage.
+    const percentageOfSales =
+      totalSalesAll > 0 ? (totalSales / totalSalesAll) * 100 : 0;
+
+    return {
+      menuItemId: id,
+      name: menuItem.name,
+      unitSold,
+      totalSales,
+      percentageOfSales,
+    };
+  });
 }

@@ -58,7 +58,7 @@ export default function MainScreen() {
               />
             </Svg>
           </View>
-          <Text className="text-center font-OnestSemiBold text-[72px] leading-[100%]">
+          <Text className="ios:text-[72px] android:text-[64px] text-center font-OnestSemiBold leading-[100%]">
             Cashless, Paperless, Effortless
           </Text>
           <Text className="text-center font-OnestRegular text-base">
@@ -69,7 +69,7 @@ export default function MainScreen() {
         <Button
           onPress={() => router.push('/login')}
           className="mx-4 mb-10 h-14 bg-[#0C0E12]">
-          <Text className="text-default-secondary font-OnestSemiBold">
+          <Text className="font-OnestSemiBold text-default-secondary">
             Login
           </Text>
         </Button>

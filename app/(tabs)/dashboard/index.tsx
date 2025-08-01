@@ -4,7 +4,6 @@ import {
   ArrowLeftIcon,
   ArrowRightIcon,
   ChevronDownIcon,
-  ChevronRightIcon,
 } from 'lucide-react-native';
 import { useCallback, useRef, useState } from 'react';
 import {
@@ -34,6 +33,7 @@ import { useAuth } from '~/context/AuthUserContext';
 import { getTimeOfDay } from '~/lib/utils';
 import ModeOfTransactions from './components/ModeOfTransactions';
 import Orders from './components/Orders';
+import ProductMovement from './components/ProductMovement';
 import TotalSales from './components/TotalSales';
 import TotalTransactionsAndCustomers from './components/TotalTransactionsAndCustomers';
 
@@ -85,14 +85,14 @@ export default function DashboardScreen() {
       <SafeAreaView className="flex-1">
         <View className="flex-row items-center justify-between px-4 py-1">
           <View className="w-32">
-            <Text className="text-default-primary font-OnestSemiBold text-base">
+            <Text className="font-OnestSemiBold text-base text-default-primary">
               {isToday(date) ? format(date, 'EEE, MMM d') : ''}
             </Text>
           </View>
           <DropdownMenu>
             <DropdownMenuTrigger ref={dateRef} asChild>
               <TouchableOpacity className="flex-row items-center gap-1">
-                <Text className="text-default-primary font-OnestSemiBold text-base">
+                <Text className="font-OnestSemiBold text-base text-default-primary">
                   {isToday(date) ? 'Today' : format(date, 'EEE, MMM d')}
                 </Text>
                 <ChevronDownIcon color="#CECFD2" size="18" />
@@ -153,7 +153,7 @@ export default function DashboardScreen() {
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }>
           <View className="flex-row items-center justify-between">
-            <Text className="text-default-primary font-OnestSemiBold text-2xl">
+            <Text className="font-OnestSemiBold text-2xl text-default-primary">
               Good {getTimeOfDay()},{'\n'}
               {user?.name}
             </Text>
@@ -165,132 +165,7 @@ export default function DashboardScreen() {
           <TotalTransactionsAndCustomers date={date} refreshing={refreshing} />
           <ModeOfTransactions date={date} refreshing={refreshing} />
           <Orders date={date} refreshing={refreshing} />
-          {/* product movement */}
-          <View className="rounded-xl border border-[#22262F] bg-[#13161B] p-3">
-            <View className="flex-row items-center justify-between">
-              <Text className="text-default-secondary font-OnestMedium text-xs">
-                Product Movement
-              </Text>
-              <ChevronRightIcon color="#FFFFFF" />
-            </View>
-            <View className="mt-6 gap-2">
-              <View className="flex-row items-center justify-between border-b border-[#22262F] pb-2">
-                <View>
-                  <Text className="text-default-primary font-OnestSemiBold text-lg">
-                    Pistachio Latte
-                  </Text>
-                  <Text className="text-default-secondary font-OnestRegular text-xs">
-                    22 units
-                  </Text>
-                </View>
-                <View>
-                  <View className="flex-row items-center gap-1">
-                    <Text className="font-OnestRegular text-xs text-[#47CD89]">
-                      +18%
-                    </Text>
-                    <Text className="text-default-primary font-OnestSemiBold text-lg">
-                      ₱4,840.00
-                    </Text>
-                  </View>
-                  <Text className="text-default-secondary text-right font-OnestRegular text-xs">
-                    14.77%
-                  </Text>
-                </View>
-              </View>
-              <View className="flex-row items-center justify-between border-b border-[#22262F] pb-2">
-                <View>
-                  <Text className="text-default-primary font-OnestSemiBold text-lg">
-                    Loca’s Ube Cheesecake
-                  </Text>
-                  <Text className="text-default-secondary font-OnestRegular text-xs">
-                    10 units
-                  </Text>
-                </View>
-                <View>
-                  <View className="flex-row items-center gap-1">
-                    <Text className="font-OnestRegular text-xs text-[#47CD89]">
-                      +23%
-                    </Text>
-                    <Text className="text-default-primary font-OnestSemiBold text-lg">
-                      ₱3,950.00
-                    </Text>
-                  </View>
-                  <Text className="text-default-secondary text-right font-OnestRegular text-xs">
-                    12.05%
-                  </Text>
-                </View>
-              </View>
-              <View className="flex-row items-center justify-between border-b border-[#22262F] pb-2">
-                <View>
-                  <Text className="text-default-primary font-OnestSemiBold text-lg">
-                    Classic Beef Tapa
-                  </Text>
-                  <Text className="text-default-secondary font-OnestRegular text-xs">
-                    6 units
-                  </Text>
-                </View>
-                <View>
-                  <View className="flex-row items-center gap-1">
-                    <Text className="font-OnestRegular text-xs text-[#F97066]">
-                      -10%
-                    </Text>
-                    <Text className="text-default-primary font-OnestSemiBold text-lg">
-                      ₱3,360.00
-                    </Text>
-                  </View>
-                  <Text className="text-default-secondary text-right font-OnestRegular text-xs">
-                    10.25%
-                  </Text>
-                </View>
-              </View>
-              <View className="flex-row items-center justify-between border-b border-[#22262F] pb-2">
-                <View>
-                  <Text className="text-default-primary font-OnestSemiBold text-lg">
-                    Miso Caramel-glazed Salmon
-                  </Text>
-                  <Text className="text-default-secondary font-OnestRegular text-xs">
-                    6 units
-                  </Text>
-                </View>
-                <View>
-                  <View className="flex-row items-center gap-1">
-                    <Text className="font-OnestRegular text-xs text-[#F97066]">
-                      -16%
-                    </Text>
-                    <Text className="text-default-primary font-OnestSemiBold text-lg">
-                      ₱2,880.00
-                    </Text>
-                  </View>
-                  <Text className="text-default-secondary text-right font-OnestRegular text-xs">
-                    8.79%
-                  </Text>
-                </View>
-              </View>
-              <View className="flex-row items-center justify-between pb-2">
-                <View>
-                  <Text className="text-default-primary font-OnestSemiBold text-lg">
-                    Crispy Pork Belly
-                  </Text>
-                  <Text className="text-default-secondary font-OnestRegular text-xs">
-                    5 units
-                  </Text>
-                </View>
-                <View>
-                  <View className="flex-row items-center gap-1">
-                    <Text className="font-OnestRegular text-xs text-[#F97066]">
-                      -2%
-                    </Text>
-                    <Text className="text-default-primary font-OnestSemiBold text-lg">
-                      ₱2,100.00
-                    </Text>
-                  </View>
-                  <Text className="text-default-secondary text-right font-OnestRegular text-xs">
-                    6.41%
-                  </Text>
-                </View>
-              </View>
-            </View>
-          </View>
+          <ProductMovement date={date} refreshing={refreshing} />
         </ScrollView>
         <FloatingMenu />
       </SafeAreaView>
