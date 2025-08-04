@@ -16,14 +16,21 @@ export function useAI({ data }: { data: Insight }) {
 
     const prompt = `
     As business owner, I want you to generate a summary and insights about the question and the json result:
-
+    
     Question: ${data.question}
-
+    
     json result:
-
     ${JSON.stringify(data.chart.data_json)}
     
     Please create a comprehensive summary of these query results. Focus on the key findings, patterns, and notable information.
+    
+    Please provide your response in the following format:
+    
+    ## Summary
+    [Your plain-text summary]
+    
+    ## Analytical Insights
+    [Provide 2-3 analytical insights or recommendations based on the data in summary]
     
     Guidelines:
     - Be specific with numbers and dates when available

@@ -51,12 +51,19 @@ export function useModeOfTransactionsInsightGPT({
     As business owner, I want you to generate a summary and insights about the question and the json result:
 
     Here's the data:
-
     - Self-ordering: ${sourceCounts.KIOSK} transactions (${getPercentage(sourceTotals.KIOSK).toFixed(2)}%) with a total of ${formatPrice(sourceTotals.KIOSK)}
     - Counter: ${sourceCounts.SERVICE} transactions (${getPercentage(sourceTotals.SERVICE).toFixed(2)}%) with a total of ${formatPrice(sourceTotals.SERVICE)}
     - Table QR: ${sourceCounts.DINER} transactions (${getPercentage(sourceTotals.DINER).toFixed(2)}%) with a total of ${formatPrice(sourceTotals.DINER)}
 
     Please create a comprehensive summary of these query results. Focus on the key findings, patterns, and notable information.
+    
+    Please provide your response in the following format:
+    
+    ## Summary
+    [Your plain-text summary]
+    
+    ## Analytical Insights
+    [Provide 2-3 analytical insights or recommendations based on the data in summary]
     
     Guidelines:
     - Be specific with numbers and dates when available
