@@ -36,17 +36,23 @@ export function useProductMovementInsightGPT({
     });
 
     const prompt = `
-Analyze the following menu item performance data and provide insights:
-- Identify which menu items are top performers based on unitSold and totalSales.
-- Highlight any items with a high percentageOfSales but low unitSold.
-- Suggest which items might benefit from promotions or pricing adjustments.
-- Output your analysis in bullet points or a short paragraph per item.
+    As business owner, I want you to generate a summary and insights about the question and the json result:
 
-Here's the data:
+    Here's the data:
+    
+    ${data}
 
-${data}
-
-Finally, provide a short overall summary of the menu's performance and trends. Keep it concise and add emojis for tone (e.g., 🔥 if it's strong or 😢 if low).`.trim();
+    Please create a comprehensive summary of these query results. Focus on the key findings, patterns, and notable information.
+    
+    Guidelines:
+    - Be specific with numbers and dates when available
+    - Highlight the most important findings first
+    - Use clear, non-technical language
+    - If data shows trends, mention them clearly
+    - Keep the summary concise but informative
+    - IMPORTANT: All monetary values should be formatted in Philippine Peso (PHP). Use ₱ symbol or 'PHP' prefix (e.g., ₱1,234.56 or PHP 1,234.56)
+    - Format large numbers with commas for readability (e.g., ₱1,234,567.89)
+    - Always include currency symbol/prefix when mentioning monetary amounts, revenue, sales, or financial figures`.trim();
 
     (async () => {
       setLoading(true);
@@ -56,7 +62,8 @@ Finally, provide a short overall summary of the menu's performance and trends. K
           messages: [
             {
               role: 'system',
-              content: 'You are a helpful and concise sales analyst.',
+              content:
+                'You are a data analyst expert at creating clear, insightful summaries of database query results. Always provide factual, accurate information based on the data provided.',
             },
             {
               role: 'user',

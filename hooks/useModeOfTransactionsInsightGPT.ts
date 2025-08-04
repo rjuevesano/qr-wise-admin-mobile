@@ -48,13 +48,25 @@ export function useModeOfTransactionsInsightGPT({
       totalAmount > 0 ? (value / totalAmount) * 100 : 0;
 
     const prompt = `
-Analyze and compare the three modes of transactions used today:
+    As business owner, I want you to generate a summary and insights about the question and the json result:
 
-- Self-ordering: ${sourceCounts.KIOSK} transactions (${getPercentage(sourceTotals.KIOSK).toFixed(2)}%) with a total of ${formatPrice(sourceTotals.KIOSK)}
-- Counter: ${sourceCounts.SERVICE} transactions (${getPercentage(sourceTotals.SERVICE).toFixed(2)}%) with a total of ${formatPrice(sourceTotals.SERVICE)}
-- Table QR: ${sourceCounts.DINER} transactions (${getPercentage(sourceTotals.DINER).toFixed(2)}%) with a total of ${formatPrice(sourceTotals.DINER)}
+    Here's the data:
 
-Highlight the dominant mode, discuss possible reasons for its performance, and mention how the other two compare. Keep it concise and add emojis for tone (e.g., 🔥 if it's strong or 😢 if low).`.trim();
+    - Self-ordering: ${sourceCounts.KIOSK} transactions (${getPercentage(sourceTotals.KIOSK).toFixed(2)}%) with a total of ${formatPrice(sourceTotals.KIOSK)}
+    - Counter: ${sourceCounts.SERVICE} transactions (${getPercentage(sourceTotals.SERVICE).toFixed(2)}%) with a total of ${formatPrice(sourceTotals.SERVICE)}
+    - Table QR: ${sourceCounts.DINER} transactions (${getPercentage(sourceTotals.DINER).toFixed(2)}%) with a total of ${formatPrice(sourceTotals.DINER)}
+
+    Please create a comprehensive summary of these query results. Focus on the key findings, patterns, and notable information.
+    
+    Guidelines:
+    - Be specific with numbers and dates when available
+    - Highlight the most important findings first
+    - Use clear, non-technical language
+    - If data shows trends, mention them clearly
+    - Keep the summary concise but informative
+    - IMPORTANT: All monetary values should be formatted in Philippine Peso (PHP). Use ₱ symbol or 'PHP' prefix (e.g., ₱1,234.56 or PHP 1,234.56)
+    - Format large numbers with commas for readability (e.g., ₱1,234,567.89)
+    - Always include currency symbol/prefix when mentioning monetary amounts, revenue, sales, or financial figures`.trim();
 
     (async () => {
       setLoading(true);
@@ -64,7 +76,8 @@ Highlight the dominant mode, discuss possible reasons for its performance, and m
           messages: [
             {
               role: 'system',
-              content: 'You are a helpful and concise sales analyst.',
+              content:
+                'You are a data analyst expert at creating clear, insightful summaries of database query results. Always provide factual, accurate information based on the data provided.',
             },
             {
               role: 'user',

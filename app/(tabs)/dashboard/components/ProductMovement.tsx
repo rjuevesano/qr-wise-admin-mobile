@@ -82,12 +82,12 @@ export default function ProductMovement({
         </View>
       ) : (
         <View className="mt-6 gap-2">
-          {filteredMovements.map((item, index) => (
+          {filteredMovements.slice(0, 5).map((item, index) => (
             <View
               key={item.menuItemId}
               className={cn(
-                'flex-row items-center justify-between gap-4 border-b border-[#22262F] pb-2',
-                filteredMovements.length === index + 1 && 'border-0',
+                'flex-row items-center justify-between gap-4 border-t border-[#22262F] pt-2',
+                index === 0 && 'border-0',
               )}>
               <View className="flex-1">
                 <Text

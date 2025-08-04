@@ -235,6 +235,13 @@ export interface UpsellAd {
 export interface Insight {
   chart?: {
     component?: string;
+    chart_type?: 'line' | 'bar' | 'area' | 'pie' | 'scatter' | 'composed';
+    data_json?: {
+      [key: string]: string | number;
+    }[];
+    data_summary?: {
+      columns?: string[];
+    };
   };
   error: string;
   execution_time: string;

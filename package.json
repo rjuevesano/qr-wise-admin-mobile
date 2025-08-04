@@ -5,8 +5,8 @@
   "scripts": {
     "start": "expo start -- --reset-cache",
     "reset-project": "node ./scripts/reset-project.js",
-    "android": "expo run:android",
-    "ios": "expo run:ios",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "expo lint",
     "build:android:development": "eas build --platform android --profile development --local",
@@ -36,6 +36,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "expo": "~53.0.20",
+    "expo-audio": "^0.4.8",
     "expo-blur": "~14.1.5",
     "expo-build-properties": "^0.14.8",
     "expo-clipboard": "^7.1.5",

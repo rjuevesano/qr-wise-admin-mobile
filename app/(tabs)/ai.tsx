@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import { XIcon } from 'lucide-react-native';
 import { useState } from 'react';
 import {
@@ -18,6 +19,11 @@ import { getRandomPrompts } from '~/lib/constants';
 
 export default function AIScreen() {
   const [askQuestionModal, setAskQuestionModal] = useState<boolean>(false);
+  const [question, setQuestion] = useState<string>('');
+
+  const handleSubmitQuestion = (question: string) => {
+    router.push(`/ai-insights?question=${question}`);
+  };
 
   return (
     <View className="flex-1 bg-[#0C0E12]">
@@ -39,28 +45,26 @@ export default function AIScreen() {
             className="absolute"
           />
         </View>
-        <View className="ios:bottom-[100px] android:bottom-20 absolute left-0 right-0 p-5">
+        <View className="absolute bottom-[100px] left-0 right-0 p-5">
           <View className="rounded-xl bg-[#13161B] px-4 py-[14px]">
             <View className="flex-row items-center justify-between">
               <Text className="font-OnestSemiBold text-sm text-default-primary">
                 Suggested questions
               </Text>
-              <TouchableOpacity>
-                <XIcon color="#FFFFFF" />
-              </TouchableOpacity>
             </View>
             <View className="mt-2.5 gap-2">
               {getRandomPrompts(4).map((prompt, index) => (
                 <TouchableOpacity
                   key={index}
-                  className="w-fit flex-row flex-wrap items-center gap-1 rounded-md bg-[#22262F] p-2.5">
+                  onPress={() => handleSubmitQuestion(prompt)}
+                  className="w-fit flex-row gap-1 rounded-md bg-[#22262F] p-2.5">
                   <Svg width="15" height="15" viewBox="0 0 15 15" fill="none">
                     <Path
                       d="M3.405 9.30769C2.31125 8.93394 2.27813 7.42269 3.30563 6.97957L3.40563 6.94207L4.88063 6.43769C5.2189 6.3221 5.52844 6.13531 5.78839 5.88992C6.04834 5.64453 6.25263 5.34625 6.3875 5.01519L6.43812 4.87957L6.94188 3.40457C7.31563 2.31082 8.82687 2.27769 9.27 3.30457L9.3075 3.40457L9.81188 4.87957C9.92739 5.21795 10.1141 5.52762 10.3595 5.78768C10.6049 6.04774 10.9033 6.25213 11.2344 6.38707L11.3694 6.43769L12.845 6.94144C13.9388 7.31519 13.9719 8.82644 12.945 9.26894L12.845 9.30769L11.37 9.81144C11.0316 9.92696 10.7219 10.1137 10.4619 10.3591C10.2018 10.6045 9.99743 10.9028 9.8625 11.2339L9.81188 11.3689L9.30812 12.8439C8.93437 13.9383 7.42312 13.9714 6.98062 12.9439L6.94188 12.8439L6.43812 11.3689C6.32254 11.0307 6.13575 10.7211 5.89036 10.4612C5.64497 10.2012 5.34668 9.99694 5.01562 9.86207L4.88063 9.81144L3.405 9.30769ZM1.25 3.12457C1.25 3.00764 1.2828 2.89306 1.34467 2.79385C1.40654 2.69463 1.495 2.61476 1.6 2.56332L1.67313 2.53332L2.31438 2.31457L2.53313 1.67269C2.57293 1.55552 2.64663 1.4528 2.74488 1.37755C2.84313 1.3023 2.96151 1.25792 3.08501 1.25002C3.20851 1.24212 3.33158 1.27106 3.43862 1.33318C3.54565 1.3953 3.63184 1.48779 3.68625 1.59894L3.71625 1.67269L3.935 2.31394L4.57687 2.53269C4.69402 2.57257 4.79669 2.64633 4.87187 2.74461C4.94705 2.8429 4.99137 2.9613 4.9992 3.08479C5.00703 3.20829 4.97803 3.33133 4.91586 3.43833C4.8537 3.54533 4.76117 3.63146 4.65 3.68582L4.57687 3.71582L3.93563 3.93457L3.71688 4.57644C3.67707 4.69362 3.60337 4.79634 3.50512 4.87159C3.40687 4.94683 3.28849 4.99122 3.16499 4.99912C3.04149 5.00701 2.91842 4.97807 2.81138 4.91595C2.70435 4.85384 2.61816 4.76134 2.56375 4.65019L2.53375 4.57644L2.315 3.93519L1.67313 3.71644C1.54964 3.6743 1.44244 3.59456 1.36656 3.48842C1.29068 3.38228 1.24992 3.25504 1.25 3.12457Z"
                       fill="#ACBDCC"
                     />
                   </Svg>
-                  <Text className="font-OnestMedium text-xs text-[#ECECED]">
+                  <Text className="font-OnestMedium text-sm text-[#ECECED]">
                     {prompt}
                   </Text>
                 </TouchableOpacity>
@@ -86,7 +90,7 @@ export default function AIScreen() {
                   </ClipPath>
                 </Defs>
               </Svg>
-              <Text className="font-OnestMedium text-default-primary">
+              <Text className="font-OnestMedium text-default-secondary">
                 Ask anything
               </Text>
             </View>
@@ -127,7 +131,9 @@ export default function AIScreen() {
                 className="mt-5 border-b border-[#22262F] pb-3 font-OnestSemiBold text-xl text-white"
                 placeholder="Ask anything..."
                 placeholderTextColor="#94979C"
-                onSubmitEditing={() => {}}
+                value={question}
+                onChangeText={setQuestion}
+                onSubmitEditing={() => handleSubmitQuestion(question)}
                 returnKeyType="done"
               />
             </KeyboardAwareScrollView>

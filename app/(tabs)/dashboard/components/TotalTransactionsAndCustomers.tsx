@@ -66,11 +66,11 @@ export default function TotalTransactionsAndCustomers({
           />
         </Svg>
         <View className="gap-1">
-          <Text className="text-default-secondary font-OnestMedium text-xs">
+          <Text className="font-OnestMedium text-xs text-default-secondary">
             Total Transactions
           </Text>
           <View className="flex-row items-center gap-1">
-            <Text className="text-default-primary font-OnestSemiBold text-2xl">
+            <Text className="font-OnestSemiBold text-2xl text-default-primary">
               {countToday}
             </Text>
             {countToday > countLastWeekOfToday ? (
@@ -97,11 +97,11 @@ export default function TotalTransactionsAndCustomers({
           />
         </Svg>
         <View className="gap-1">
-          <Text className="text-default-secondary font-OnestMedium text-xs">
-            In-store Customers
+          <Text className="font-OnestMedium text-xs text-default-secondary">
+            In-store Foot Traffic
           </Text>
           <View className="flex-row items-center gap-1">
-            <Text className="text-default-primary font-OnestSemiBold text-2xl">
+            <Text className="font-OnestSemiBold text-2xl text-default-primary">
               {countCustomers}
             </Text>
           </View>

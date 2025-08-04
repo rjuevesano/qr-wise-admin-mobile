@@ -62,8 +62,9 @@ export default function MainScreen() {
             Cashless, Paperless, Effortless
           </Text>
           <Text className="text-center font-OnestRegular text-base">
-            Serve more guests faster and boost revenue by up to 30% with
-            lightning-fast QR code ordering.
+            {
+              'Serve more guests faster and boost revenue by\nup to 30% with lightning-fast QR code ordering.'
+            }
           </Text>
         </View>
         <Button
