@@ -94,10 +94,12 @@ export function useSalesInsightGPT({
     
     Please provide your response in the following format:
     
-    ## Summary
+    Summary
+
     [Your plain-text summary]
     
-    ## Analytical Insights
+    Analytical Insights
+    
     [Provide 2-3 analytical insights or recommendations based on the data in summary]
     
     Guidelines:
@@ -126,6 +128,7 @@ export function useSalesInsightGPT({
               content: prompt,
             },
           ],
+          temperature: 0.2,
         });
 
         setInsight(res.choices[0].message.content || '');

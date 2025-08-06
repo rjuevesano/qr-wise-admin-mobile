@@ -39,13 +39,25 @@ export default function AIInsightsScreen() {
   const scrolledMessagesRef = useRef<Set<number>>(new Set());
   const [results, setResults] = useState<Insight>();
   const [messages, setMessages] = useState<
-    { type: 'user' | 'ai'; content: string }[]
+    {
+      type: 'user' | 'ai';
+      content: string;
+      chartType?: string;
+      chartData?: {
+        [key: string]: string | number;
+      }[];
+    }[]
   >([]);
   const [input, setInput] = useState<string>('');
   const [isFollowUp, setIsFollowUp] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const { insight, loading: insightLoading } = useAI({
+  const {
+    insight,
+    loading: insightLoading,
+    chartType,
+    chartData,
+  } = useAI({
     data: results!,
   });
 
@@ -108,7 +120,10 @@ export default function AIInsightsScreen() {
 
   useEffect(() => {
     if (insight?.length > 0) {
-      setMessages((prev) => [...prev, { type: 'ai', content: insight }]);
+      setMessages((prev) => [
+        ...prev,
+        { type: 'ai', content: insight, chartType, chartData },
+      ]);
 
       InteractionManager.runAfterInteractions(() => {
         setTimeout(() => {
@@ -116,6 +131,7 @@ export default function AIInsightsScreen() {
         }, 300);
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [insight]);
 
   const fetchInsights = async (q: string) => {
@@ -236,16 +252,28 @@ export default function AIInsightsScreen() {
           }}
           showsVerticalScrollIndicator={false}
           scrollEventThrottle={16}
-          keyboardShouldPersistTaps="handled"
-          // keyboardDismissMode="on-drag"
-        >
-          {/* {question && (
-              <Text className="mb-4 border-b border-[#22262F] pb-3 font-OnestSemiBold text-xl text-white">
-                {question}
-              </Text>
-            )} */}
+          keyboardShouldPersistTaps="handled">
           {messages.map((msg, idx) => {
             const isUser = msg.type === 'user';
+
+            // const barData = chartData?.flatMap((row) =>
+            //   Object.entries(row).map(([label, value], index) => {
+            //     const v = formatStringToNumber((value || 0).toString()) || 0;
+            //     return {
+            //       value: v,
+            //       label,
+            //       ...(index === 0 && { spacing: 6 }),
+            //       ...(v > 0 && {
+            //         topLabelComponent: () => (
+            //           <Text className="-mb-5 text-xs text-[#22262F]">
+            //             {v.toFixed(2)}
+            //           </Text>
+            //         ),
+            //       }),
+            //     };
+            //   }),
+            // );
+
             return (
               <View
                 key={idx}
@@ -254,27 +282,61 @@ export default function AIInsightsScreen() {
                 }`}>
                 <View
                   className={`max-w-[75%] rounded-xl px-4 py-3 ${
-                    isUser ? 'bg-[#86E7F1]' : 'bg-[#22262F]'
+                    isUser ? 'bg-[#86E7F1]' : 'w-full bg-[#22262F]'
                   }`}>
                   {msg.type === 'ai' ? (
-                    <TypeWriterEffect
-                      content={msg.content}
-                      minDelay={5}
-                      maxDelay={10}
-                      style={{
-                        color: '#F7F7F7',
-                        fontSize: 16,
-                        fontFamily: 'Onest-Regular',
-                      }}
-                      onTypingEnd={() => {
-                        if (!scrolledMessagesRef.current.has(idx)) {
-                          scrolledMessagesRef.current.add(idx);
-                          scrollViewRef.current?.scrollToEnd({
-                            animated: true,
-                          });
-                        }
-                      }}
-                    />
+                    <>
+                      {/* {chartData.length > 0 && (
+                        <ScrollView
+                          horizontal
+                          contentContainerStyle={{
+                            flex: 1,
+                            width: '100%',
+                            marginBottom: 20,
+                          }}>
+                          <BarChart
+                            data={barData}
+                            width={width / 2}
+                            barWidth={50}
+                            noOfSections={3}
+                            frontColor={
+                              barData.length % 2 === 0 ? '#36BFFA' : '#C2F93A'
+                            }
+                            barBorderRadius={4}
+                            yAxisThickness={0}
+                            yAxisTextStyle={{
+                              color: '#F7F7F7',
+                              fontSize: 12,
+                              fontFamily: 'Onest-Regular',
+                            }}
+                            xAxisThickness={0}
+                            xAxisLabelTextStyle={{
+                              color: '#F7F7F7',
+                              fontSize: 12,
+                              fontFamily: 'Onest-Regular',
+                            }}
+                          />
+                        </ScrollView>
+                      )} */}
+                      <TypeWriterEffect
+                        content={msg.content}
+                        minDelay={5}
+                        maxDelay={10}
+                        style={{
+                          color: '#F7F7F7',
+                          fontSize: 16,
+                          fontFamily: 'Onest-Regular',
+                        }}
+                        onTypingEnd={() => {
+                          if (!scrolledMessagesRef.current.has(idx)) {
+                            scrolledMessagesRef.current.add(idx);
+                            scrollViewRef.current?.scrollToEnd({
+                              animated: true,
+                            });
+                          }
+                        }}
+                      />
+                    </>
                   ) : (
                     <Text className="font-OnestRegular text-base text-[#162736]">
                       {msg.content}

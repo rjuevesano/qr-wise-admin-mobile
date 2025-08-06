@@ -155,7 +155,7 @@ export default function DashboardScreen() {
           <View className="flex-row items-center justify-between">
             <Text className="font-OnestSemiBold text-2xl text-default-primary">
               Good {getTimeOfDay()},{'\n'}
-              {user?.name}
+              {(user?.name || '')?.split(' ')[0]}
             </Text>
             {weatherData && (
               <DailyWeatherForecast dailyData={[weatherData.daily?.[0]]} />

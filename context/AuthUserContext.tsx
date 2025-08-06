@@ -20,6 +20,8 @@ type AuthContextType = {
   updateUser: (updates: Partial<User>) => void;
   store: Store | null;
   getStore: (storeId?: string) => void;
+  isPremiumUser: boolean;
+  setIsPremiumUser: (isPremiumUser: boolean) => void;
   openSheet: SharedValue<boolean>;
   toggleSheet: () => void;
 };
@@ -42,6 +44,10 @@ const AuthContext = createContext<AuthContextType>({
   getStore: () => {
     throw new Error();
   },
+  isPremiumUser: false,
+  setIsPremiumUser: () => {
+    throw new Error();
+  },
   openSheet: {} as SharedValue<boolean>,
   toggleSheet: () => {
     throw new Error();
@@ -55,6 +61,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
   const [user, setUser] = useState<User | null | undefined>(undefined);
   const [store, setStore] = useState<Store | null>(null);
+  const [isPremiumUser, setIsPremiumUser] = useState<boolean>(false);
 
   const openSheet = useSharedValue<boolean>(false);
 
@@ -128,11 +135,13 @@ export function AuthProvider({ children }: PropsWithChildren) {
       updateUser,
       store,
       getStore,
+      isPremiumUser,
+      setIsPremiumUser,
       openSheet,
       toggleSheet,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [user, store, openSheet],
+    [user, store, isPremiumUser, openSheet],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

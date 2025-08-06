@@ -56,8 +56,8 @@ export default function TotalTransactionsAndCustomers({
       : ((countToday - countLastWeekOfToday) / countLastWeekOfToday) * 100;
 
   return (
-    <View className="flex-row justify-between">
-      <View className="w-[48%] gap-2 rounded-xl border border-[#22262F] bg-[#13161B] p-3">
+    <View className="flex-row justify-between gap-4">
+      <View className="flex-1 gap-2 rounded-xl border border-[#22262F] bg-[#13161B] p-3">
         <Svg width="28" height="28" viewBox="0 0 28 28" fill="none">
           <Rect width="28" height="28" rx="14" fill="#9CDF03" />
           <Path
@@ -85,7 +85,7 @@ export default function TotalTransactionsAndCustomers({
           </View>
         </View>
       </View>
-      <View className="w-[48%] gap-2 rounded-xl border border-[#22262F] bg-[#13161B] p-3">
+      <View className="w-1/2 gap-2 rounded-xl border border-[#22262F] bg-[#13161B] p-3">
         <Svg width="28" height="28" viewBox="0 0 28 28" fill="none">
           <Rect width="28" height="28" rx="14" fill="#9CDF03" />
           <Path
