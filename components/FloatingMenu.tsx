@@ -3,6 +3,7 @@ import { router } from 'expo-router';
 import React, { useRef, useState } from 'react';
 import {
   Animated,
+  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -222,7 +223,7 @@ const styles = StyleSheet.create({
   },
   container: {
     position: 'absolute',
-    bottom: 100,
+    bottom: Platform.OS === 'ios' ? 110 : 100,
     right: 20,
     alignItems: 'flex-end',
   },
