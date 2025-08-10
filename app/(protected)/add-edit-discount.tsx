@@ -56,7 +56,6 @@ export default function AddEditDiscountScreen() {
         setDiscount(discount);
         setDiscounts(store.discounts);
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [store]),
   );
 

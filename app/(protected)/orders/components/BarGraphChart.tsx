@@ -72,7 +72,6 @@ export default function BarGraphChart({
     if (refreshing) {
       refetch?.();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refreshing]);
 
   const ttransactions = useMemo(() => {
@@ -112,9 +111,9 @@ export default function BarGraphChart({
       ...(value > 0 && {
         topLabelComponent: () =>
           isToday(day) ? (
-            <Text className="text-default-secondary mb-1 text-xs">{value}</Text>
+            <Text className="mb-1 text-xs text-default-secondary">{value}</Text>
           ) : (
-            <Text className="text-default-secondary -mb-5 text-xs">
+            <Text className="-mb-5 text-xs text-default-secondary">
               {value}
             </Text>
           ),

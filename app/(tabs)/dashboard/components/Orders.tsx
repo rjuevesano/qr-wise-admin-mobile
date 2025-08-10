@@ -30,7 +30,6 @@ export default function Orders({
     if (refreshing) {
       refetch?.();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refreshing]);
 
   const recentTransactions = (transactions || []).filter((t) => {

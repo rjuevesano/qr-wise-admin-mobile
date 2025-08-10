@@ -32,7 +32,6 @@ export default function Notes({
     if (refreshing) {
       refetch?.();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refreshing]);
 
   async function handleSaveNote() {
@@ -50,17 +49,17 @@ export default function Notes({
 
   return (
     <View className="gap-2 rounded-xl border border-[#22262F] bg-[#13161B] p-3">
-      <Text className="text-default-secondary font-OnestMedium text-sm">
+      <Text className="font-OnestMedium text-sm text-default-secondary">
         Notes
       </Text>
       {(notes || []).map((note) => (
         <View
           key={note.id}
           className="flex-row justify-between gap-2 border-t border-[#22262F] py-2">
-          <Text className="text-default-primary flex-1 font-OnestRegular text-base">
+          <Text className="flex-1 font-OnestRegular text-base text-default-primary">
             {note.text}
           </Text>
-          <Text className="text-default-secondary font-OnestMedium text-xs">
+          <Text className="font-OnestMedium text-xs text-default-secondary">
             {format(note.createdAt.toDate(), 'hh:mm a')}
           </Text>
         </View>
@@ -80,7 +79,7 @@ export default function Notes({
             {loading ? (
               <ActivityIndicator />
             ) : (
-              <Text className="text-default-secondary font-OnestSemiBold">
+              <Text className="font-OnestSemiBold text-default-secondary">
                 Save note
               </Text>
             )}
@@ -88,7 +87,7 @@ export default function Notes({
           <TouchableOpacity
             onPress={() => setAddNote(false)}
             className="h-10 items-center justify-center">
-            <Text className="text-default-secondary font-OnestSemiBold">
+            <Text className="font-OnestSemiBold text-default-secondary">
               Cancel
             </Text>
           </TouchableOpacity>
@@ -98,7 +97,7 @@ export default function Notes({
           onPress={() => setAddNote(true)}
           className="flex-row items-center gap-1.5 border border-[#373A41] bg-[#0C0E12]">
           <PlusIcon color="#61656C" size="20" />
-          <Text className="text-default-secondary font-OnestSemiBold">
+          <Text className="font-OnestSemiBold text-default-secondary">
             Add Note
           </Text>
         </Button>

@@ -43,7 +43,6 @@ export default function TotalSales({
       refetchTransactionsToday?.();
       refetchTransactionsWeekOfToday?.();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refreshing]);
 
   const totalSalesLastWeekOfTodayWithVatInc = (transactionsWeekOfToday || [])
@@ -78,10 +77,10 @@ export default function TotalSales({
       }
       className="h-[136px] rounded-xl border border-[#22262F] bg-[#13161B] p-3">
       <View className="absolute left-3 top-3 z-10">
-        <Text className="text-default-secondary font-OnestMedium text-xs">
+        <Text className="font-OnestMedium text-xs text-default-secondary">
           Total Sales
         </Text>
-        <Text className="text-default-primary mt-2 font-OnestSemiBold text-2xl">
+        <Text className="mt-2 font-OnestSemiBold text-2xl text-default-primary">
           {formatPrice(totalSalesTodayWithVatInc)}
         </Text>
         <View className="flex-row items-center gap-1">
@@ -94,7 +93,7 @@ export default function TotalSales({
               {totalSalesPercentage.toFixed(2)}%
             </Text>
           )}
-          <Text className="text-default-secondary font-OnestRegular text-xs">
+          <Text className="font-OnestRegular text-xs text-default-secondary">
             vs{' '}
             {isToday(dateToday)
               ? format(dateToday, "'Last' eeee")

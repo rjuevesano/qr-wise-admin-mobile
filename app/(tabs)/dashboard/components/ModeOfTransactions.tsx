@@ -30,7 +30,6 @@ export default function ModeOfTransactions({
     if (refreshing) {
       refetchTransactions?.();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refreshing]);
 
   const sourceTotals: Record<SourceType, number> = {

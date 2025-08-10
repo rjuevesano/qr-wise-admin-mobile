@@ -34,7 +34,6 @@ export default function MenuScreen() {
 
   useEffect(() => {
     filterRecords();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [menuItems, tab, filter]);
 
   const filterRecords = () => {

@@ -62,6 +62,7 @@ export default function AIScreen() {
           </Text>
           <View className="size-10" />
         </View>
+
         <View className="-mt-20 gap-10">
           <Image
             source={require('~/assets/images/ai1.png')}

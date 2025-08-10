@@ -64,6 +64,7 @@ export function useModeOfTransactionsInsightGPT({
     [Your plain-text summary]
     
     Analytical Insights
+    
     [Provide 2-3 analytical insights or recommendations based on the data in summary]
     
     Guidelines:

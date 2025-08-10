@@ -51,7 +51,6 @@ export default function OrdersScreen() {
       refetchTransactionsToday?.();
       refetchTransactionsWeekOfToday?.();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refreshing]);
 
   const onRefresh = useCallback(() => {

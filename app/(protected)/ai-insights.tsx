@@ -91,7 +91,6 @@ export default function AIInsightsScreen() {
       showSub.remove();
       hideSub.remove();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -115,7 +114,6 @@ export default function AIInsightsScreen() {
       setIsFollowUp(false);
       Keyboard.dismiss();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFollowUp]);
 
   useEffect(() => {
@@ -131,7 +129,6 @@ export default function AIInsightsScreen() {
         }, 300);
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [insight]);
 
   const fetchInsights = async (q: string) => {

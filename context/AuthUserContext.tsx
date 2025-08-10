@@ -87,7 +87,6 @@ export function AuthProvider({ children }: PropsWithChildren) {
   useEffect(() => {
     if (!storeId) return;
     getStore();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [storeId]);
 
   async function getStore(id?: string) {
@@ -140,7 +139,6 @@ export function AuthProvider({ children }: PropsWithChildren) {
       openSheet,
       toggleSheet,
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [user, store, isPremiumUser, openSheet],
   );
 

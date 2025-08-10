@@ -34,7 +34,6 @@ export default function ModeOfTransactionsScreen() {
     if (refreshing) {
       refetch?.();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refreshing]);
 
   const onRefresh = useCallback(() => {

@@ -2,7 +2,7 @@ import { format } from 'date-fns';
 import { router } from 'expo-router';
 import { ChevronRightIcon, InboxIcon } from 'lucide-react-native';
 import { useEffect, useMemo } from 'react';
-import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { useMenuItemsQuery } from '~/hooks/useMenuItemsQuery';
 import { useTransactionsQuery } from '~/hooks/useTransactionsQuery';
 import {
@@ -26,11 +26,7 @@ export default function ProductMovement({
     'menu-items',
   );
 
-  const {
-    data: transactions,
-    isLoading,
-    refetch,
-  } = useTransactionsQuery(
+  const { data: transactions, refetch } = useTransactionsQuery(
     {
       status: 'SUCCESS' as const,
       date: dateToday,
@@ -54,7 +50,6 @@ export default function ProductMovement({
     if (refreshing) {
       refetch?.();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refreshing]);
 
   return (
@@ -69,11 +64,7 @@ export default function ProductMovement({
         </Text>
         <ChevronRightIcon color="#FFFFFF" />
       </View>
-      {isLoading ? (
-        <View className="my-20">
-          <ActivityIndicator size="large" />
-        </View>
-      ) : filteredMovements.length === 0 ? (
+      {filteredMovements.length === 0 ? (
         <View className="flex-col items-center justify-center gap-2 rounded-lg p-10 text-center text-gray-500">
           <InboxIcon color="#CECFD2" />
           <Text className="font-OnestMedium text-sm text-default-secondary">

@@ -83,7 +83,6 @@ export default function BarGraphChart({
     if (refreshing) {
       refetch?.();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refreshing]);
 
   const ttransactions = useMemo(() => {

@@ -161,7 +161,6 @@ const TabItem = ({
 
   useEffect(() => {
     scale.value = withTiming(isActive ? 1 : 0, { duration: 200 });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isActive]);
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -213,7 +212,6 @@ export default function TabLayout() {
   useEffect(() => {
     translateY.value = withTiming(hideTabBar ? 100 : 0, { duration: 300 });
     opacity.value = withTiming(hideTabBar ? 0 : 1, { duration: 300 });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hideTabBar]);
 
   const animatedTabStyle = useAnimatedStyle(() => ({

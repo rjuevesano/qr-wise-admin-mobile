@@ -1,4 +1,4 @@
-import { endOfDay, format, startOfDay } from 'date-fns';
+import { endOfDay, format, isToday, startOfDay } from 'date-fns';
 import { TrendingDown, TrendingUp } from 'lucide-react-native';
 import { Text, View } from 'react-native';
 import { LineChart } from 'react-native-gifted-charts';
@@ -16,8 +16,20 @@ export default function LineGraphChart({
   transactionsWeekOfToday: Transaction[];
   transactionsToday: Transaction[];
 }) {
-  // Set start and end hour range (6 AM to 8 AM)
-  const HOUR_RANGE = Array.from({ length: 15 }, (_, i) => i + 6);
+  // Collect all transaction hours from both datasets
+  const allHours = [
+    ...transactionsToday.map((tx) => {
+      const date = tx.paymentSuccessAt?.toDate?.() || tx.createdAt?.toDate?.();
+      return date?.getHours();
+    }),
+    ...transactionsWeekOfToday.map((tx) => {
+      const date = tx.paymentSuccessAt?.toDate?.() || tx.createdAt?.toDate?.();
+      return date?.getHours();
+    }),
+  ].filter((h): h is number => typeof h === 'number');
+
+  // Get unique sorted hours
+  const HOUR_RANGE = [...new Set(allHours)].sort((a, b) => a - b);
   const startDate = startOfDay(dateToday);
   const endDate = endOfDay(dateToday);
   const startLastWeek = startOfDay(lastWeekOfToday);
@@ -75,7 +87,7 @@ export default function LineGraphChart({
   );
 
   return (
-    <View className="h-[264px] overflow-hidden rounded-xl border border-[#22262F] bg-[#13161B] py-3">
+    <View className="h-[264px] overflow-hidden rounded-xl border border-[#22262F] bg-[#13161B] py-3 pl-3">
       <LineChart
         areaChart
         data={ptDataToday}
@@ -139,20 +151,25 @@ export default function LineGraphChart({
 
             return (
               <View className="ml-6 w-[200px] rounded-[7px] bg-[#22262F] px-4 py-2.5">
-                <Text className="text-default-primary mb-1 font-OnestSemiBold text-[13px]">
+                <Text className="mb-1 font-OnestSemiBold text-[13px] text-default-primary">
                   {items[0].label}
                 </Text>
                 <View className="flex-row items-center gap-1">
                   <View className="size-2 rounded-full bg-[#C2F93A]" />
-                  <Text className="text-default-secondary font-OnestMedium text-sm">
-                    Today: ₱{formatNumber(items[0].value)}
+                  <Text className="font-OnestMedium text-sm text-default-secondary">
+                    {isToday(dateToday)
+                      ? 'Today'
+                      : format(dateToday, 'MMM d, yyyy')}
+                    : ₱{formatNumber(items[0].value)}
                   </Text>
                 </View>
                 <View className="flex-row items-center gap-1">
                   <View className="size-2 rounded-full bg-[#36BFFA]" />
-                  <Text className="text-default-secondary font-OnestMedium text-sm">
-                    {format(new Date(), "'Last' EEEE")}: ₱
-                    {formatNumber(items[1].value)}
+                  <Text className="font-OnestMedium text-sm text-default-secondary">
+                    {isToday(dateToday)
+                      ? format(lastWeekOfToday, "'Last' EEEE")
+                      : format(lastWeekOfToday, 'MMM d, yyyy')}
+                    : ₱{formatNumber(items[1].value)}
                   </Text>
                 </View>
                 <View className="flex-row items-center gap-1">

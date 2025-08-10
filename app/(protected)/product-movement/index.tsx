@@ -1,9 +1,9 @@
-import { subDays, subMonths } from 'date-fns';
+import { subDays } from 'date-fns';
 import { router, useLocalSearchParams } from 'expo-router';
+import LottieView from 'lottie-react-native';
 import { ChevronDownIcon, InboxIcon } from 'lucide-react-native';
 import { useCallback, useMemo, useState } from 'react';
 import {
-  ActivityIndicator,
   RefreshControl,
   ScrollView,
   Text,
@@ -143,7 +143,7 @@ export default function ProductMovementScreen() {
                 setRange({ ...range, from: dateToday });
               }}
               className={cn(
-                'h-9 w-1/3 items-center justify-center',
+                'h-9 w-1/2 items-center justify-center',
                 tab === 'DAILY' &&
                   'rounded-lg border border-[#373A41] bg-[#13161B]',
               )}>
@@ -161,7 +161,7 @@ export default function ProductMovementScreen() {
                 setRange({ ...range, from: subDays(dateToday, 7) });
               }}
               className={cn(
-                'h-9 w-1/3 items-center justify-center',
+                'h-9 w-1/2 items-center justify-center',
                 tab === 'WEEKLY' &&
                   'rounded-lg border border-[#373A41] bg-[#13161B]',
               )}>
@@ -173,7 +173,7 @@ export default function ProductMovementScreen() {
                 Weekly
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => {
                 setTab('MONTHLY');
                 setRange({ ...range, from: subMonths(dateToday, 1) });
@@ -190,7 +190,7 @@ export default function ProductMovementScreen() {
                 )}>
                 Monthly
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
           <View className="rounded-xl border border-[#22262F] bg-[#13161B] p-3">
             <View className="flex-row items-center gap-1">
@@ -220,8 +220,12 @@ export default function ProductMovementScreen() {
               </DropdownMenu>
             </View>
             {isLoading ? (
-              <View className="my-20">
-                <ActivityIndicator size="large" />
+              <View className="my-20 items-center">
+                <LottieView
+                  autoPlay
+                  style={{ width: 200, height: 200 }}
+                  source={require('~/assets/lottie/washing-animation.json')}
+                />
               </View>
             ) : filteredMovements.length === 0 ? (
               <View className="flex-col items-center justify-center gap-2 rounded-lg p-10 text-center text-gray-500">

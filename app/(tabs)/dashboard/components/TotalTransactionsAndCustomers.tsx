@@ -38,7 +38,6 @@ export default function TotalTransactionsAndCustomers({
       refetchTransactionsToday?.();
       refetchTransactionsWeekOfToday?.();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refreshing]);
 
   const countLastWeekOfToday = (transactionsWeekOfToday || []).length;

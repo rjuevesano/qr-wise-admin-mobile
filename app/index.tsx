@@ -14,7 +14,6 @@ export default function IndexRedirect() {
     } else {
       router.replace('/main');
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   return null;
