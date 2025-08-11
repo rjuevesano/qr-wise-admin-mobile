@@ -230,7 +230,7 @@ export default function TabLayout() {
         }}>
         <Tabs.Screen name="dashboard/index" options={{ href: '/dashboard' }} />
         <Tabs.Screen name="ai" options={{ href: '/ai' }} />
-        <Tabs.Screen name="menu" options={{ href: '/menu' }} />
+        <Tabs.Screen name="menu/index" options={{ href: '/menu' }} />
         <Tabs.Screen name="settings/index" options={{ href: '/settings' }} />
       </Tabs>
       <Animated.View

@@ -23,3 +23,18 @@ export function getRandomPrompts(count = 3) {
   const shuffled = [...PROMPTS].sort(() => 0.5 - Math.random());
   return shuffled.slice(0, count);
 }
+
+export const MENU_GROUP_OPTION_CATEGORIES = [
+  { value: 'FOOD', label: 'Food' },
+  { value: 'BEVERAGE', label: 'Beverage' },
+];
+
+export const MENU_FOOD_CATEGORIES = [
+  { value: 'BRUNCH', label: 'Brunch' },
+  { value: 'DESSERTS', label: 'Desserts' },
+];
+
+export const MENU_BEVERAGE_CATEGORIES = [
+  { value: 'COFFEE', label: 'Coffee' },
+  { value: 'NON-COFFEE', label: 'Non-coffee' },
+];
