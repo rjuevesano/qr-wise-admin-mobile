@@ -1,4 +1,5 @@
 import { router, useFocusEffect } from 'expo-router';
+import { useVideoPlayer, VideoView } from 'expo-video';
 import { XIcon } from 'lucide-react-native';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
@@ -22,6 +23,13 @@ import { cn } from '~/lib/utils';
 
 export default function AIScreen() {
   const { isPremiumUser, setIsPremiumUser } = useAuth();
+  const player = useVideoPlayer(
+    require('~/assets/videos/chat.mp4'),
+    (player) => {
+      player.loop = true;
+      player.play();
+    },
+  );
 
   const [selectedPackage, setSelectedPackage] = useState<
     'weekly' | 'yearly' | 'monthly'
@@ -62,15 +70,12 @@ export default function AIScreen() {
           </Text>
           <View className="size-10" />
         </View>
-
-        <View className="-mt-20 gap-10">
-          <Image
-            source={require('~/assets/images/ai1.png')}
-            className="absolute left-0 right-0 w-full"
-          />
-          <Image
-            source={require('~/assets/images/ai2.png')}
-            className="absolute left-0 right-0 w-full"
+        <View className="flex-1">
+          <VideoView
+            style={{ flex: 1 }}
+            player={player}
+            nativeControls={false}
+            contentFit="cover"
           />
         </View>
         {isPremiumUser ? (

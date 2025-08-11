@@ -42,7 +42,8 @@
         {
           "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone."
         }
-      ]
+      ],
+      "expo-video"
     ],
     "splash": {
       "image": "./assets/images/splash-icon.png",
