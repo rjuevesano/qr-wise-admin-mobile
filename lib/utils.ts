@@ -1,4 +1,5 @@
 import { clsx, type ClassValue } from 'clsx';
+import { subDays } from 'date-fns';
 import pluralize from 'pluralize';
 import { twMerge } from 'tailwind-merge';
 import { MenuItemMovementWithComparison } from '~/hooks/useProductMovementInsightGPT';
@@ -10,6 +11,7 @@ import {
   Store,
   TempOrder,
   Transaction,
+  Voucher,
 } from '~/types';
 
 export function cn(...inputs: ClassValue[]) {
@@ -103,6 +105,7 @@ export function calculateTotals(
   diningOption: DiningOption,
   store: Store | null,
   discount: Discount | null,
+  voucher: Voucher | null,
 ) {
   const totalBeverageOrderAmount = orders.reduce((acc, order) => {
     if (order.menu?.category !== 'BEVERAGE') return acc;
@@ -190,6 +193,9 @@ export function calculateTotals(
       : 0
     ).toFixed(2),
   );
+  const voucherDiscounted = Number(
+    (voucher ? (subtotal + vat) * (voucher.rate / 100) : 0).toFixed(2),
+  );
 
   const totalWithServiceChargeAmount =
     totalFoodOrderWithServiceChargeAmount + totalAddOnsWithServiceChargeAmount;
@@ -211,7 +217,12 @@ export function calculateTotals(
       ).toFixed(2),
     );
     const lessDiscount = Number(
-      (discount ? Number(discount?.rate) / 100 : 0).toFixed(2),
+      (discount
+        ? Number(discount.rate) / 100
+        : voucher
+          ? voucher.rate / 100
+          : 0
+      ).toFixed(2),
     );
     serviceCharge = Number(
       (
@@ -221,7 +232,13 @@ export function calculateTotals(
     );
   }
 
-  const totalAmount = subtotal + vat - discounted + serviceCharge + togoCharge;
+  const totalAmount =
+    subtotal +
+    vat -
+    discounted -
+    voucherDiscounted +
+    serviceCharge +
+    togoCharge;
 
   return {
     quantity,
@@ -252,6 +269,7 @@ export function calculateTransactionsTotals(
         transaction.diningOption,
         store,
         discount || null,
+        transaction.voucher || null,
       );
       return subtotal;
     })
@@ -411,4 +429,14 @@ export function computeMenuItemMovementFull(
       percentageOfSales,
     };
   });
+}
+
+export function getDateFromRange(value: number, numDays: number) {
+  if (value < 0 || value > numDays) {
+    throw new Error(`Value must be between 0 and ${numDays}`);
+  }
+
+  const daysFromToday = numDays - value;
+  const date = subDays(new Date(), daysFromToday);
+  return date;
 }

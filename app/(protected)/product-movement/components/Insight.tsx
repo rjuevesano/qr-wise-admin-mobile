@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Text, View } from 'react-native';
 import TypeWriter from 'react-native-typewriter-effect';
 import WiseAi from '~/components/icons/WiseAi';
@@ -11,8 +12,9 @@ export default function Insight({
 }: {
   movements: MenuItemMovementWithComparison[];
 }) {
+  const data = useMemo(() => movements, [movements]);
   const { insight, loading } = useProductMovementInsightGPT({
-    movements,
+    movements: data,
   });
 
   return (

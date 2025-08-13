@@ -170,7 +170,9 @@ export type Transaction = {
   numPax: number;
   isEnded: boolean;
   amount: number;
+  beforeDiscountAmount: number;
   discountId: string;
+  voucher: Voucher;
   source: 'DINER' | 'KIOSK' | 'SERVICE';
   paymentMethod: PaymentMethod;
   cashReceived: number;
@@ -178,7 +180,13 @@ export type Transaction = {
   referenceNumber: string;
   requestReferenceNumber: string;
   refundMethod: RefundMethod;
-  status: 'PENDING' | 'SUCCESS' | 'FAILED' | 'CANCELLED' | 'REFUNDED';
+  status:
+    | 'PENDING'
+    | 'SUCCESS'
+    | 'FAILED'
+    | 'CANCELLED'
+    | 'REFUNDED'
+    | 'TERMINAL';
   orderStatus: 'PENDING' | 'COMPLETED';
   paymentSuccessAt: Timestamp;
   completedAt: Timestamp;
@@ -256,3 +264,15 @@ export interface Insight {
   sql: string;
   summary: string;
 }
+
+export type Voucher = {
+  id?: string;
+  code: string;
+  used: boolean;
+  rate: number;
+  name: string;
+  storeId: string;
+  createdAt: Timestamp;
+  usedAt: Timestamp;
+  expiredAt: Timestamp;
+};

@@ -83,8 +83,7 @@ export function useProductMovementInsightGPT({
         });
 
         setInsight(res.choices[0].message.content || '');
-      } catch (err) {
-        console.error('GPT Insight Error:', err);
+      } catch {
         setInsight('Error generating insight.');
       } finally {
         setLoading(false);

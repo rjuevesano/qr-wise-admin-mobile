@@ -1,4 +1,4 @@
-import { subDays } from 'date-fns';
+import { format } from 'date-fns';
 import { router, useLocalSearchParams } from 'expo-router';
 import LottieView from 'lottie-react-native';
 import { ChevronDownIcon, InboxIcon } from 'lucide-react-native';
@@ -11,6 +11,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import RangeSlider from 'react-native-sticky-range-slider';
 import Svg, { Path } from 'react-native-svg';
 import { useDebounce } from 'use-debounce';
 import {
@@ -25,6 +26,7 @@ import {
   cn,
   computeMenuItemMovementFull,
   formatPrice,
+  getDateFromRange,
   makePluralize,
 } from '~/lib/utils';
 import Insight from './components/Insight';
@@ -54,13 +56,15 @@ export default function ProductMovementScreen() {
   });
   const [sortBy, setSortBy] = useState<SortByOption>('totalSales');
   const [refreshing, setRefreshing] = useState<boolean>(false);
+  const [min, setMin] = useState<number>(23);
+  const [max, setMax] = useState<number>(30);
 
-  const [debouncedRange] = useDebounce(range, 500);
+  const [debouncedRange] = useDebounce(range, 1500);
 
   const transactionQueryParams = useMemo(() => {
     return {
       status: 'SUCCESS' as const,
-      date: dateToday,
+      date: debouncedRange?.to || dateToday,
       date2: debouncedRange?.from || dateToday,
       withOrders: true,
     };
@@ -75,17 +79,22 @@ export default function ProductMovementScreen() {
     return computeMenuItemMovementFull(transactions || [], menuItems || []);
   }, [transactions, menuItems]);
 
-  const sortedMovements = [...movements].sort((a, b) => {
+  const sortedMovements = useMemo(() => {
     const dir = sortBy === 'name' ? 1 : -1;
-    if (sortBy === 'name') return a.name.localeCompare(b.name) * dir;
-    if (sortBy === 'unitSold') return (a.unitSold - b.unitSold) * dir;
-    if (sortBy === 'totalSales') return (a.totalSales - b.totalSales) * dir;
-    if (sortBy === 'percentageOfSales')
-      return (a.percentageOfSales - b.percentageOfSales) * dir;
-    return 0;
-  });
+    return [...movements].sort((a, b) => {
+      if (sortBy === 'name') return a.name.localeCompare(b.name) * dir;
+      if (sortBy === 'unitSold') return (a.unitSold - b.unitSold) * dir;
+      if (sortBy === 'totalSales') return (a.totalSales - b.totalSales) * dir;
+      if (sortBy === 'percentageOfSales')
+        return (a.percentageOfSales - b.percentageOfSales) * dir;
+      return 0;
+    });
+  }, [movements, sortBy]);
 
-  const filteredMovements = sortedMovements.filter((m) => m.unitSold > 0);
+  const filteredMovements = useMemo(
+    () => sortedMovements.filter((m) => m.unitSold > 0),
+    [sortedMovements],
+  );
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -94,6 +103,15 @@ export default function ProductMovementScreen() {
     setTimeout(() => {
       setRefreshing(false);
     }, 2000);
+  }, []);
+
+  const handleValueChange = useCallback((newLow: number, newHigh: number) => {
+    setMin(newLow);
+    setMax(newHigh);
+    setRange({
+      from: getDateFromRange(newLow, 30),
+      to: getDateFromRange(newHigh, 30),
+    });
   }, []);
 
   return (
@@ -140,7 +158,7 @@ export default function ProductMovementScreen() {
             <TouchableOpacity
               onPress={() => {
                 setTab('DAILY');
-                setRange({ ...range, from: dateToday });
+                setRange({ from: dateToday, to: dateToday });
               }}
               className={cn(
                 'h-9 w-1/2 items-center justify-center',
@@ -158,7 +176,7 @@ export default function ProductMovementScreen() {
             <TouchableOpacity
               onPress={() => {
                 setTab('WEEKLY');
-                setRange({ ...range, from: subDays(dateToday, 7) });
+                // setRange({ ...range, from: subDays(dateToday, 7) });
               }}
               className={cn(
                 'h-9 w-1/2 items-center justify-center',
@@ -176,7 +194,7 @@ export default function ProductMovementScreen() {
             {/* <TouchableOpacity
               onPress={() => {
                 setTab('MONTHLY');
-                setRange({ ...range, from: subMonths(dateToday, 1) });
+                setRange({ ...range, from: subDays(dateToday, 30) });
               }}
               className={cn(
                 'h-9 w-1/3 items-center justify-center',
@@ -192,6 +210,40 @@ export default function ProductMovementScreen() {
               </Text>
             </TouchableOpacity> */}
           </View>
+          {tab !== 'DAILY' && (
+            <View className="gap-10">
+              <Text className="font-OnestSemiBold text-sm text-default-primary">
+                Date Range
+              </Text>
+              <RangeSlider
+                style={{ paddingHorizontal: 16 }}
+                min={0}
+                max={30}
+                step={1}
+                low={min}
+                high={max}
+                onValueChanged={handleValueChange}
+                renderLowValue={(value) => (
+                  <Text className="font-OnestMedium text-default-primary">
+                    {format(getDateFromRange(value, 30), 'MMM d')}
+                  </Text>
+                )}
+                renderHighValue={(value) => (
+                  <Text className="font-OnestMedium text-default-primary">
+                    {format(getDateFromRange(value, 30), 'MMM d')}
+                  </Text>
+                )}
+                renderThumb={() => (
+                  <View className="size-6 rounded-full border-2 border-[#0C0E12] bg-[#C2F93A]" />
+                )}
+                renderRail={() => (
+                  <View className="h-2 flex-1 rounded-full bg-[#373A41]" />
+                )}
+                renderRailSelected={() => <View className="h-2 bg-[#C2F93A]" />}
+                disableRange={false}
+              />
+            </View>
+          )}
           <View className="rounded-xl border border-[#22262F] bg-[#13161B] p-3">
             <View className="flex-row items-center gap-1">
               <Text className="font-OnestMedium text-xs text-default-secondary">
@@ -268,7 +320,7 @@ export default function ProductMovementScreen() {
               </View>
             )}
           </View>
-          <Insight movements={filteredMovements} />
+          <Insight movements={isLoading ? [] : filteredMovements} />
         </ScrollView>
       </SafeAreaView>
     </View>

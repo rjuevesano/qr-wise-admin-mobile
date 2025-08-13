@@ -3,6 +3,7 @@ import { useVideoPlayer, VideoView } from 'expo-video';
 import { XIcon } from 'lucide-react-native';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
+  AppState,
   Image,
   Keyboard,
   Modal,
@@ -32,10 +33,10 @@ export default function AIScreen() {
     },
   );
 
+  const [appState, setAppState] = useState(AppState.currentState);
   const [selectedPackage, setSelectedPackage] = useState<
     'weekly' | 'yearly' | 'monthly'
   >('yearly');
-
   const [askQuestionModal, setAskQuestionModal] = useState<boolean>(false);
   const [question, setQuestion] = useState<string>('');
   const questionRef = useRef<TextInput>(null);
@@ -47,10 +48,19 @@ export default function AIScreen() {
       return () => {
         setAskQuestionModal(false);
         setQuestion('');
-        player.pause();
+        if (player) {
+          player.pause();
+        }
       };
-    }, []),
+    }, [appState]),
   );
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', setAppState);
+    return () => {
+      subscription.remove();
+    };
+  }, []);
 
   useEffect(() => {
     if (askQuestionModal) {
@@ -173,7 +183,7 @@ export default function AIScreen() {
                 activeOpacity={0.8}
                 onPress={() => setSelectedPackage('weekly')}
                 className={cn(
-                  'flex-1 gap-2 rounded-xl border border-[#22262F] p-3',
+                  'flex-1 gap-2 rounded-xl border border-[#22262F] bg-[#0c0e12] p-3',
                   selectedPackage === 'weekly' && 'border-[#C2F93A]',
                 )}>
                 <Text className="font-OnestMedium text-xs text-default-secondary">
@@ -190,7 +200,7 @@ export default function AIScreen() {
                 activeOpacity={0.8}
                 onPress={() => setSelectedPackage('yearly')}
                 className={cn(
-                  'flex-1 gap-2 rounded-xl border border-[#22262F] p-3',
+                  'flex-1 gap-2 rounded-xl border border-[#22262F] bg-[#0c0e12] p-3',
                   selectedPackage === 'yearly' && 'border-[#C2F93A]',
                 )}>
                 <Text className="font-OnestMedium text-xs text-default-secondary">
@@ -212,7 +222,7 @@ export default function AIScreen() {
                 activeOpacity={0.8}
                 onPress={() => setSelectedPackage('monthly')}
                 className={cn(
-                  'flex-1 gap-2 rounded-xl border border-[#22262F] p-3',
+                  'flex-1 gap-2 rounded-xl border border-[#22262F] bg-[#0c0e12] p-3',
                   selectedPackage === 'monthly' && 'border-[#C2F93A]',
                 )}>
                 <Text className="font-OnestMedium text-xs text-default-secondary">

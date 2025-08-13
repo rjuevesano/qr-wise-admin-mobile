@@ -6,6 +6,7 @@ import {
   useAudioRecorderState,
 } from 'expo-audio';
 import { router, useLocalSearchParams } from 'expo-router';
+import LottieView from 'lottie-react-native';
 import { MicIcon } from 'lucide-react-native';
 import { useEffect, useRef, useState } from 'react';
 import {
@@ -240,7 +241,6 @@ export default function AIInsightsScreen() {
         <View className="size-10" />
       </View>
       <View className="flex-1 rounded-t-2xl bg-[#13161B]">
-        {/* Chat ScrollView */}
         <ScrollView
           ref={scrollViewRef}
           contentContainerStyle={{
@@ -344,15 +344,15 @@ export default function AIInsightsScreen() {
             );
           })}
           {(loading || insightLoading) && (
-            <View className="mt-2 max-w-[75%] flex-row items-center gap-2 rounded-lg bg-[#22262F] px-4 py-3">
-              <Text className="font-OnestRegular text-base text-default-tertiary">
-                Thinking
+            <View className="my-20 flex-1 items-center">
+              <LottieView
+                autoPlay
+                style={{ width: 200, height: 200 }}
+                source={require('~/assets/lottie/espresso-shot-animation.json')}
+              />
+              <Text className="-mt-8 font-OnestSemiBold text-xl text-white">
+                Thinking...
               </Text>
-              <View className="ml-2 flex-row gap-1">
-                <View className="h-2 w-2 animate-bounce rounded-full bg-default-tertiary" />
-                <View className="h-2 w-2 animate-bounce rounded-full bg-default-tertiary delay-100" />
-                <View className="h-2 w-2 animate-bounce rounded-full bg-default-tertiary delay-200" />
-              </View>
             </View>
           )}
         </ScrollView>

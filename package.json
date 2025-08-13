@@ -53,8 +53,10 @@
     "expo-status-bar": "~2.2.3",
     "expo-symbols": "~0.4.5",
     "expo-system-ui": "~5.0.10",
+    "expo-video": "~2.2.2",
     "expo-web-browser": "~14.2.0",
     "firebase": "^11.10.0",
+    "lottie-react-native": "7.2.2",
     "lucide-react-native": "^0.525.0",
     "moti": "^0.30.0",
     "nativewind": "^4.1.23",
@@ -74,6 +76,7 @@
     "react-native-safe-area-context": "5.4.0",
     "react-native-screens": "~4.11.1",
     "react-native-shimmer-placeholder": "^2.0.9",
+    "react-native-sticky-range-slider": "^0.1.7",
     "react-native-svg": "15.11.2",
     "react-native-svg-transformer": "^1.5.1",
     "react-native-typewriter-effect": "^0.1.4",
@@ -84,9 +87,7 @@
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^3.4.17",
     "tailwindcss-animate": "^1.0.7",
-    "use-debounce": "^10.0.5",
-    "lottie-react-native": "7.2.2",
-    "expo-video": "~2.2.2"
+    "use-debounce": "^10.0.5"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

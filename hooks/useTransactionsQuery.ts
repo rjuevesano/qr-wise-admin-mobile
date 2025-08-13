@@ -1,8 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import {
   collection,
-  doc,
-  getDoc,
   getDocs,
   limit,
   orderBy,
@@ -11,11 +9,13 @@ import {
   where,
 } from 'firebase/firestore';
 import { useAuth } from '~/context/AuthUserContext';
+import { useOrders } from '~/context/OrdersContext';
 import { db } from '~/lib/firebase';
 import { Order, PaymentMethod, Transaction } from '~/types';
 
 const fetchTransactions = async ({
   storeId,
+  orders,
   status,
   onlyPending,
   sort,
@@ -27,6 +27,7 @@ const fetchTransactions = async ({
   withOrders = false,
 }: {
   storeId: string;
+  orders: Order[];
   status?: string;
   onlyPending?: boolean;
   sort?: 'asc' | 'desc';
@@ -39,7 +40,7 @@ const fetchTransactions = async ({
 }) => {
   const queryConstraints: QueryConstraint[] = [
     where('storeId', '==', storeId),
-    orderBy('orderNum', sort ?? 'asc'),
+    orderBy('createdAt', sort ?? 'asc'),
   ];
 
   if (status) queryConstraints.push(where('status', '==', status));
@@ -86,15 +87,13 @@ const fetchTransactions = async ({
       const transaction = { ...docSnap.data(), id: docSnap.id } as Transaction;
 
       if (withOrders) {
-        const orders = await Promise.all(
+        const orderData = await Promise.all(
           (transaction.orderIds || []).map(async (orderId) => {
-            const orderDoc = await getDoc(doc(db, 'orders', orderId));
-            return orderDoc.exists()
-              ? ({ id: orderId, ...orderDoc.data() } as Order)
-              : null;
+            const order = orders.find((o) => o.id === orderId);
+            return order || null;
           }),
         );
-        transaction.orders = orders.filter(Boolean) as Order[];
+        transaction.orders = orderData.filter(Boolean) as Order[];
       }
 
       return transaction;
@@ -119,10 +118,12 @@ export const useTransactionsQuery = (
   key: string,
 ) => {
   const { store } = useAuth();
+  const { orders } = useOrders();
 
   return useQuery({
     queryKey: [key, store?.id, params],
-    queryFn: () => fetchTransactions({ storeId: store?.id!, ...params }),
+    queryFn: () =>
+      fetchTransactions({ storeId: store?.id!, orders, ...params }),
     enabled: !!store?.id, // Only run if store is available
     staleTime: 1000 * 60 * 5, // 5 minutes
   });

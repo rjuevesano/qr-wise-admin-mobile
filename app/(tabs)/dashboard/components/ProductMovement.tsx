@@ -1,4 +1,5 @@
 import { format } from 'date-fns';
+import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import { ChevronRightIcon, InboxIcon } from 'lucide-react-native';
 import { useEffect, useMemo } from 'react';
@@ -73,7 +74,7 @@ export default function ProductMovement({
         </View>
       ) : (
         <View className="mt-6 gap-2">
-          {filteredMovements.slice(0, 5).map((item, index) => (
+          {filteredMovements.slice(0, 10).map((item, index) => (
             <View
               key={item.menuItemId}
               className={cn(
@@ -102,6 +103,24 @@ export default function ProductMovement({
               </View>
             </View>
           ))}
+          <LinearGradient
+            colors={['#13161B00', '#13161B']}
+            style={{
+              height: 194,
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+            }}>
+            <View className="mb-2 flex-row items-center">
+              <Text className="font-OnestSemiBold text-default-secondary">
+                See More
+              </Text>
+              <ChevronRightIcon color="#CECFD2" />
+            </View>
+          </LinearGradient>
         </View>
       )}
     </TouchableOpacity>
