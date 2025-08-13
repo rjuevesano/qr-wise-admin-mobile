@@ -26,6 +26,7 @@ export default function AIScreen() {
   const player = useVideoPlayer(
     require('~/assets/videos/chat.mp4'),
     (player) => {
+      player.muted = true;
       player.loop = true;
       player.play();
     },
@@ -41,9 +42,12 @@ export default function AIScreen() {
 
   useFocusEffect(
     useCallback(() => {
+      player.play();
+
       return () => {
         setAskQuestionModal(false);
         setQuestion('');
+        player.pause();
       };
     }, []),
   );

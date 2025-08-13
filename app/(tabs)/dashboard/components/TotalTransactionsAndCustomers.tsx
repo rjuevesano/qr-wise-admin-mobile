@@ -1,6 +1,8 @@
-import { subDays } from 'date-fns';
+import { format, subDays } from 'date-fns';
+import { router } from 'expo-router';
+import { ChevronRightIcon } from 'lucide-react-native';
 import { useEffect, useMemo } from 'react';
-import { Text, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import Svg, { Path, Rect } from 'react-native-svg';
 import { useTransactionsQuery } from '~/hooks/useTransactionsQuery';
 
@@ -84,7 +86,13 @@ export default function TotalTransactionsAndCustomers({
           </View>
         </View>
       </View>
-      <View className="w-1/2 gap-2 rounded-xl border border-[#22262F] bg-[#13161B] p-3">
+      <TouchableOpacity
+        onPress={() =>
+          router.push(
+            `/in-store-foot-traffic?date=${format(date, 'yyyy-MM-dd')}`,
+          )
+        }
+        className="w-1/2 gap-2 rounded-xl border border-[#22262F] bg-[#13161B] p-3">
         <Svg width="28" height="28" viewBox="0 0 28 28" fill="none">
           <Rect width="28" height="28" rx="14" fill="#9CDF03" />
           <Path
@@ -105,7 +113,10 @@ export default function TotalTransactionsAndCustomers({
             </Text>
           </View>
         </View>
-      </View>
+        <View className="absolute right-3 top-3">
+          <ChevronRightIcon color="#FFFFFF" />
+        </View>
+      </TouchableOpacity>
     </View>
   );
 }
