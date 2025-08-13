@@ -2,7 +2,7 @@ import { format } from 'date-fns';
 import { router, useLocalSearchParams } from 'expo-router';
 import LottieView from 'lottie-react-native';
 import { ChevronDownIcon, InboxIcon } from 'lucide-react-native';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   RefreshControl,
   ScrollView,
@@ -41,7 +41,6 @@ const SORT_BY_OPTIONS = [
 
 export default function ProductMovementScreen() {
   const { date } = useLocalSearchParams<{ date: string }>();
-
   const dateToday = useMemo(() => new Date(date), [date]);
 
   const { data: menuItems } = useMenuItemsQuery(
@@ -56,7 +55,7 @@ export default function ProductMovementScreen() {
   });
   const [sortBy, setSortBy] = useState<SortByOption>('totalSales');
   const [refreshing, setRefreshing] = useState<boolean>(false);
-  const [min, setMin] = useState<number>(23);
+  const [min, setMin] = useState<number>(0);
   const [max, setMax] = useState<number>(30);
 
   const [debouncedRange] = useDebounce(range, 1500);
@@ -108,11 +107,16 @@ export default function ProductMovementScreen() {
   const handleValueChange = useCallback((newLow: number, newHigh: number) => {
     setMin(newLow);
     setMax(newHigh);
-    setRange({
-      from: getDateFromRange(newLow, 30),
-      to: getDateFromRange(newHigh, 30),
-    });
   }, []);
+
+  useEffect(() => {
+    if (min >= 0 && max <= 30 && tab !== 'DAILY') {
+      setRange({
+        from: getDateFromRange(min, 30),
+        to: getDateFromRange(max, 30),
+      });
+    }
+  }, [min, max, tab]);
 
   return (
     <View className="flex-1 bg-[#0C0E12]">
@@ -161,7 +165,7 @@ export default function ProductMovementScreen() {
                 setRange({ from: dateToday, to: dateToday });
               }}
               className={cn(
-                'h-9 w-1/2 items-center justify-center',
+                'h-9 w-1/3 items-center justify-center',
                 tab === 'DAILY' &&
                   'rounded-lg border border-[#373A41] bg-[#13161B]',
               )}>
@@ -176,10 +180,15 @@ export default function ProductMovementScreen() {
             <TouchableOpacity
               onPress={() => {
                 setTab('WEEKLY');
-                // setRange({ ...range, from: subDays(dateToday, 7) });
+                setMin(23);
+                setMax(30);
+                // setRange({
+                //   from: getDateFromRange(23, 30),
+                //   to: getDateFromRange(30, 30),
+                // });
               }}
               className={cn(
-                'h-9 w-1/2 items-center justify-center',
+                'h-9 w-1/3 items-center justify-center',
                 tab === 'WEEKLY' &&
                   'rounded-lg border border-[#373A41] bg-[#13161B]',
               )}>
@@ -191,10 +200,16 @@ export default function ProductMovementScreen() {
                 Weekly
               </Text>
             </TouchableOpacity>
-            {/* <TouchableOpacity
+            <TouchableOpacity
               onPress={() => {
                 setTab('MONTHLY');
-                setRange({ ...range, from: subDays(dateToday, 30) });
+                setMin(0);
+                setMax(30);
+                // setRange({
+                //   from: getDateFromRange(0, 30),
+                //   to: getDateFromRange(30, 30),
+                // });
+                // setRange({ ...range, from: subDays(dateToday, 30) });
               }}
               className={cn(
                 'h-9 w-1/3 items-center justify-center',
@@ -208,7 +223,7 @@ export default function ProductMovementScreen() {
                 )}>
                 Monthly
               </Text>
-            </TouchableOpacity> */}
+            </TouchableOpacity>
           </View>
           {tab !== 'DAILY' && (
             <View className="gap-10">
@@ -320,7 +335,10 @@ export default function ProductMovementScreen() {
               </View>
             )}
           </View>
-          <Insight movements={isLoading ? [] : filteredMovements} />
+          <Insight
+            movements={filteredMovements}
+            isReady={!isLoading && filteredMovements.length > 0}
+          />
         </ScrollView>
       </SafeAreaView>
     </View>

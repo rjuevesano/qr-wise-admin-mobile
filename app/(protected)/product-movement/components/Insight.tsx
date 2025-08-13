@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { Text, View } from 'react-native';
 import TypeWriter from 'react-native-typewriter-effect';
 import WiseAi from '~/components/icons/WiseAi';
@@ -9,13 +8,31 @@ import {
 
 export default function Insight({
   movements,
+  isReady,
 }: {
   movements: MenuItemMovementWithComparison[];
+  isReady: boolean;
 }) {
-  const data = useMemo(() => movements, [movements]);
   const { insight, loading } = useProductMovementInsightGPT({
-    movements: data,
+    movements,
+    enabled: isReady, // pass a flag to your hook
   });
+
+  if (!isReady) {
+    return (
+      <View className="gap-2 rounded-xl border border-[#22262F] bg-[#13161B] p-3">
+        <View className="flex-row items-center gap-2">
+          <WiseAi />
+          <Text className="font-OnestSemiBold text-sm text-default-primary">
+            Wise AI Insights
+          </Text>
+        </View>
+        <Text className="font-OnestRegular text-default-tertiary">
+          Waiting for data...
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <View className="gap-2 rounded-xl border border-[#22262F] bg-[#13161B] p-3">

@@ -17,13 +17,16 @@ export type MenuItemMovementWithComparison = {
 
 export function useProductMovementInsightGPT({
   movements,
+  enabled = true,
 }: {
   movements: MenuItemMovementWithComparison[];
+  enabled: boolean;
 }) {
   const [insight, setInsight] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
+    if (!enabled) return;
     if (!movements?.length) return;
 
     const data = movements.map((m) => {
@@ -89,7 +92,7 @@ export function useProductMovementInsightGPT({
         setLoading(false);
       }
     })();
-  }, [movements]);
+  }, [movements, enabled]);
 
   return { insight, loading };
 }
