@@ -23,7 +23,6 @@ import '../global.css';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import LottieView from 'lottie-react-native';
-import { OrdersProvider } from '~/context/OrdersContext';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -90,29 +89,27 @@ export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <OrdersProvider>
-          <SnackbarProvider>
-            <GestureHandlerRootView>
-              <Root />
-              <Animated.View
-                pointerEvents="none"
-                style={{
-                  ...StyleSheet.absoluteFillObject,
-                  opacity: fadeAnim,
-                  backgroundColor: '#0C0E12',
-                }}>
-                <View className="flex-1 items-center justify-center">
-                  <LottieView
-                    autoPlay
-                    loop={false}
-                    style={{ width: width / 2, height }}
-                    source={require('~/assets/lottie/qr-wise-logo.json')}
-                  />
-                </View>
-              </Animated.View>
-            </GestureHandlerRootView>
-          </SnackbarProvider>
-        </OrdersProvider>
+        <SnackbarProvider>
+          <GestureHandlerRootView>
+            <Root />
+            <Animated.View
+              pointerEvents="none"
+              style={{
+                ...StyleSheet.absoluteFillObject,
+                opacity: fadeAnim,
+                backgroundColor: '#0C0E12',
+              }}>
+              <View className="flex-1 items-center justify-center">
+                <LottieView
+                  autoPlay
+                  loop={false}
+                  style={{ width: width / 2, height }}
+                  source={require('~/assets/lottie/qr-wise-logo.json')}
+                />
+              </View>
+            </Animated.View>
+          </GestureHandlerRootView>
+        </SnackbarProvider>
       </AuthProvider>
     </QueryClientProvider>
   );
