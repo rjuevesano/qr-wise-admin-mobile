@@ -1,4 +1,5 @@
 import * as SecureStore from 'expo-secure-store';
+import { onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import {
   createContext,
@@ -9,17 +10,17 @@ import {
   useState,
 } from 'react';
 import { SharedValue, useSharedValue } from 'react-native-reanimated';
-import { db } from '~/lib/firebase';
+import { auth, db } from '~/lib/firebase';
 import { Store, User } from '~/types';
 
 type AuthContextType = {
   user: User | null | undefined;
   setUser: (user: User | null | undefined) => void;
-  loginUser: (user: User) => void;
-  logoutUser: () => void;
-  updateUser: (updates: Partial<User>) => void;
+  loginUser: (user: User) => Promise<void>;
+  logoutUser: () => Promise<void>;
+  updateUser: (updates: Partial<User>) => Promise<void>;
   store: Store | null;
-  getStore: (storeId?: string) => void;
+  getStore: (storeId?: string) => Promise<void>;
   isPremiumUser: boolean;
   setIsPremiumUser: (isPremiumUser: boolean) => void;
   openSheet: SharedValue<boolean>;
@@ -66,6 +67,14 @@ export function AuthProvider({ children }: PropsWithChildren) {
   const openSheet = useSharedValue<boolean>(false);
 
   useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      console.log('🔥 Firebase auth state changed:', user);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
     const checkSession = async () => {
       try {
         const session = await SecureStore.getItemAsync(SESSION_KEY);
@@ -105,6 +114,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
   }
 
   async function logoutUser() {
+    await auth.signOut();
     await SecureStore.deleteItemAsync(SESSION_KEY);
     setUser(null);
   }
@@ -121,6 +131,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
     await SecureStore.setItemAsync(SESSION_KEY, JSON.stringify(updatedUser));
     setUser(updatedUser);
   }
+
   const toggleSheet = () => {
     openSheet.value = !openSheet.value;
   };

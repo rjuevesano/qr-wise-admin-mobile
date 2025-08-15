@@ -1,9 +1,11 @@
 import * as Clipboard from 'expo-clipboard';
 import { router } from 'expo-router';
+import { getAuth, signInWithCustomToken } from 'firebase/auth';
 import {
   collection,
   getDocs,
   query,
+  Timestamp,
   updateDoc,
   where,
 } from 'firebase/firestore';
@@ -27,7 +29,6 @@ import { useAuth } from '~/context/AuthUserContext';
 import { useSnackbar } from '~/context/SnackbarContext';
 import { db } from '~/lib/firebase';
 import { generateOTP } from '~/lib/utils';
-import { User } from '~/types';
 
 export default function LoginScreen() {
   const { store, loginUser } = useAuth();
@@ -71,6 +72,7 @@ export default function LoginScreen() {
       const otp = generateOTP();
       await updateDoc(querySnapshot.docs[0].ref, {
         otp,
+        otpCreatedAt: Timestamp.now(),
       });
 
       const apiKey = process.env.EXPO_PUBLIC_SEMAPHORE_API_KEY;
@@ -98,20 +100,18 @@ export default function LoginScreen() {
     if (otp.length === 6) {
       setLoading(true);
       try {
-        const q = query(
-          collection(db, 'managers-pin'),
-          where('phone', '==', phoneNumber),
-          where('otp', '==', otp),
-          where('storeId', '==', store?.id),
-        );
-        const querySnapshot = await getDocs(q);
-        if (!querySnapshot.empty) {
-          const user = querySnapshot.docs[0].data() as User;
-          loginUser({ ...user, id: querySnapshot.docs[0].id });
-          router.replace('/dashboard');
-        } else {
-          showSnackbar({ message: 'Invalid OTP. Try again.', type: 'error' });
-        }
+        const res = await fetch('https://admin.qrwise.com/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone: phoneNumber, otp, storeId: store?.id }),
+        });
+        if (!res.ok) throw new Error('Login failed');
+
+        const { token, user } = await res.json();
+        const auth = getAuth();
+        await signInWithCustomToken(auth, token);
+        await loginUser(user);
+        router.replace('/dashboard');
       } catch (error) {
         console.error('Verification failed:', error);
         showSnackbar({ message: 'Invalid OTP. Try again.', type: 'error' });

@@ -2,16 +2,17 @@ import { router } from 'expo-router';
 import { ChevronRightIcon } from 'lucide-react-native';
 import { Text, TouchableOpacity, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
+import { Button } from '~/components/ui/button';
 import { Separator } from '~/components/ui/separator';
 import { useAuth } from '~/context/AuthUserContext';
 
 export default function General() {
-  const { user, store } = useAuth();
+  const { user, logoutUser, store } = useAuth();
 
   return (
     <>
       <View className="gap-2">
-        <Text className="text-default-primary font-OnestSemiBold">
+        <Text className="font-OnestSemiBold text-default-primary">
           Account Information
         </Text>
         <View className="gap-2 rounded-xl border border-[#22262F] bg-[#13161B] p-3">
@@ -22,10 +23,10 @@ export default function General() {
               )
             }
             className="gap-1">
-            <Text className="text-default-secondary font-OnestMedium text-xs">
+            <Text className="font-OnestMedium text-xs text-default-secondary">
               Full Name
             </Text>
-            <Text className="text-default-primary font-OnestSemiBold text-base">
+            <Text className="font-OnestSemiBold text-base text-default-primary">
               {user?.name}
             </Text>
             <View className="absolute bottom-0 right-0 top-0">
@@ -40,10 +41,10 @@ export default function General() {
               )
             }
             className="gap-1">
-            <Text className="text-default-secondary font-OnestMedium text-xs">
+            <Text className="font-OnestMedium text-xs text-default-secondary">
               Phone
             </Text>
-            <Text className="text-default-primary font-OnestSemiBold text-base">
+            <Text className="font-OnestSemiBold text-base text-default-primary">
               {user?.phone}
             </Text>
             <View className="absolute bottom-0 right-0 top-0">
@@ -53,7 +54,7 @@ export default function General() {
         </View>
       </View>
       <View className="gap-2">
-        <Text className="text-default-primary font-OnestSemiBold">
+        <Text className="font-OnestSemiBold text-default-primary">
           Business Information
         </Text>
         <View className="gap-2 rounded-xl border border-[#22262F] bg-[#13161B] p-3">
@@ -64,10 +65,10 @@ export default function General() {
               )
             }
             className="gap-1">
-            <Text className="text-default-secondary font-OnestMedium text-xs">
+            <Text className="font-OnestMedium text-xs text-default-secondary">
               Business Name
             </Text>
-            <Text className="text-default-primary font-OnestSemiBold text-base">
+            <Text className="font-OnestSemiBold text-base text-default-primary">
               {store?.name}
             </Text>
             <View className="absolute bottom-0 right-0 top-0">
@@ -82,10 +83,10 @@ export default function General() {
               )
             }
             className="gap-1">
-            <Text className="text-default-secondary font-OnestMedium text-xs">
+            <Text className="font-OnestMedium text-xs text-default-secondary">
               Email Address
             </Text>
-            <Text className="text-default-primary font-OnestSemiBold text-base">
+            <Text className="font-OnestSemiBold text-base text-default-primary">
               {store?.email}
             </Text>
             <View className="absolute bottom-0 right-0 top-0">
@@ -100,10 +101,10 @@ export default function General() {
               )
             }
             className="gap-1">
-            <Text className="text-default-secondary font-OnestMedium text-xs">
+            <Text className="font-OnestMedium text-xs text-default-secondary">
               Business Address
             </Text>
-            <Text className="text-default-primary font-OnestSemiBold text-base">
+            <Text className="font-OnestSemiBold text-base text-default-primary">
               {store?.address}
             </Text>
             <View className="absolute bottom-0 right-0 top-0">
@@ -118,10 +119,10 @@ export default function General() {
               )
             }
             className="gap-1">
-            <Text className="text-default-secondary font-OnestMedium text-xs">
+            <Text className="font-OnestMedium text-xs text-default-secondary">
               Mobile Number
             </Text>
-            <Text className="text-default-primary font-OnestSemiBold text-base">
+            <Text className="font-OnestSemiBold text-base text-default-primary">
               {store?.phone}
             </Text>
             <View className="absolute bottom-0 right-0 top-0">
@@ -136,10 +137,10 @@ export default function General() {
               )
             }
             className="gap-1">
-            <Text className="text-default-secondary font-OnestMedium text-xs">
+            <Text className="font-OnestMedium text-xs text-default-secondary">
               Tax Identification Number (TIN)
             </Text>
-            <Text className="text-default-primary font-OnestSemiBold text-base">
+            <Text className="font-OnestSemiBold text-base text-default-primary">
               {store?.tin}
             </Text>
             <View className="absolute bottom-0 right-0 top-0">
@@ -149,7 +150,7 @@ export default function General() {
         </View>
       </View>
       <View className="gap-2">
-        <Text className="text-default-primary font-OnestSemiBold">
+        <Text className="font-OnestSemiBold text-default-primary">
           Appearance
         </Text>
         <View className="gap-2 rounded-xl border border-[#22262F] bg-[#13161B] p-3">
@@ -165,10 +166,10 @@ export default function General() {
               />
             </Svg>
             <View className="gap-0.5">
-              <Text className="text-default-secondary font-OnestMedium">
+              <Text className="font-OnestMedium text-default-secondary">
                 Dark mode
               </Text>
-              <Text className="text-default-tertiary font-OnestRegular">
+              <Text className="font-OnestRegular text-default-tertiary">
                 Always use dark mode
               </Text>
             </View>
@@ -183,10 +184,10 @@ export default function General() {
               />
             </Svg>
             <View className="gap-0.5">
-              <Text className="text-default-secondary font-OnestMedium">
+              <Text className="font-OnestMedium text-default-secondary">
                 Light mode
               </Text>
-              <Text className="text-default-tertiary font-OnestRegular">
+              <Text className="font-OnestRegular text-default-tertiary">
                 Always use light mode
               </Text>
             </View>
@@ -201,15 +202,20 @@ export default function General() {
               />
             </Svg>
             <View className="gap-0.5">
-              <Text className="text-default-secondary font-OnestMedium">
+              <Text className="font-OnestMedium text-default-secondary">
                 System
               </Text>
-              <Text className="text-default-tertiary font-OnestRegular">
+              <Text className="font-OnestRegular text-default-tertiary">
                 Set to system default
               </Text>
             </View>
           </TouchableOpacity>
         </View>
+      </View>
+      <View>
+        <Button onPress={logoutUser} variant="destructive">
+          <Text className="font-OnestMedium text-default-primary">Logout</Text>
+        </Button>
       </View>
     </>
   );
