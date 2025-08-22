@@ -25,6 +25,10 @@ export type Discount = {
   type: string;
   rate: string;
   isSpecial: boolean;
+  requirements?: {
+    food: number;
+    beverage: number;
+  }[];
 };
 
 export type UserType = 'SERVICE' | 'KITCHEN' | 'BAR' | 'CUSTOMER';

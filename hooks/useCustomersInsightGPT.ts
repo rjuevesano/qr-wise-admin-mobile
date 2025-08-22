@@ -1,7 +1,6 @@
 import { format } from 'date-fns';
 import { OpenAI } from 'openai';
 import { useEffect, useState } from 'react';
-import { formatPrice } from '~/lib/utils';
 import { Transaction } from '~/types';
 
 const openai = new OpenAI({
@@ -83,12 +82,8 @@ export function useCustomersInsightGPT({
         };
 
         return `🕒 ${hour12} ${period}
-  - Today: ${formatPrice(today.revenue)} from ${today.orders} orders with an average order value of ${formatPrice(
-    today.revenue / today.orders,
-  )} and ${today.numPax} customers
-  - Last Week: ${formatPrice(lastWeek.revenue)} from ${lastWeek.orders} orders with an average order value of ${formatPrice(
-    lastWeek.revenue / lastWeek.orders,
-  )} and ${lastWeek.numPax} customers`;
+  - today_foot_traffic: ${today.numPax}
+  - last_week_foot_traffic: ${lastWeek.numPax}`;
       })
       .join('\n\n');
 

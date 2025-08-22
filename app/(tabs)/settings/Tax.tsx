@@ -139,6 +139,7 @@ export default function Tax() {
                 />
               </View>
               <TouchableOpacity
+                className="w-20 flex-row justify-end"
                 onPress={() =>
                   router.push(`/add-edit-discount?discountId=${discount.id}`)
                 }>
